@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; Akhmad Amanulloh</title>
+    <title>KNN (using scikit-learn) on Iris dataset. &#8212; Akhmad Amanulloh</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -52,6 +52,8 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Notebooks with MyST Markdown" href="markdown-notebooks.html" />
+    <link rel="prev" title="Diskritisasi" href="Tugas2.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -111,7 +113,7 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="markdown.html">
    Markdown Files
@@ -127,8 +129,8 @@ const thebe_selector_output = ".output, .cell_output"
    Diskritisasi
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="Tugas3.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    KNN (using scikit-learn) on Iris dataset.
   </a>
  </li>
@@ -196,7 +198,7 @@ title="Toggle navigation"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="https://mybinder.org/v2/gh/akhmadamanulloh/datamining/gh-pages?urlpath=tree/_sources/Untitled0.ipynb"
+        <a href="https://mybinder.org/v2/gh/akhmadamanulloh/datamining/gh-pages?urlpath=tree/_sources/Tugas3.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -214,7 +216,7 @@ title="Launch on Binder"
       </li>
       
       <li>
-        <a href="https://colab.research.google.com/github/akhmadamanulloh/datamining/blob/gh-pages/_sources/Untitled0.ipynb"
+        <a href="https://colab.research.google.com/github/akhmadamanulloh/datamining/blob/gh-pages/_sources/Tugas3.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -274,7 +276,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/akhmadamanulloh/datamining/issues/new?title=Issue%20on%20page%20%2FUntitled0.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/akhmadamanulloh/datamining/issues/new?title=Issue%20on%20page%20%2FTugas3.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -302,7 +304,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/Untitled0.ipynb"
+        <a href="_sources/Tugas3.ipynb"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -360,7 +362,36 @@ title="Print to PDF"
         <i class="fas fa-list"></i> Contents
     </div>
     <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="simple visible nav section-nav flex-column">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   KNN (using scikit-learn) on Iris dataset.
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#building-a-model-to-classify-the-species-of-iris-flower-based-on-the-sepal-length-speal-width-petal-length-and-petal-width">
+     Building a model to classify the species of Iris flower based on the sepal length, speal width, petal length and petal width
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#load-the-iris-data-set-and-check-the-features">
+     Load the Iris data set and check the features
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#train-the-model">
+   Train the Model
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#k-values-with-3-to-19-has-the-same-accuracy-which-is-96-66-so-we-can-use-any-one-value-from-that-i-choose-k-as-5-and-train-the-model-with-full-training-data">
+     K values with 3 to 19 has the same accuracy which is 96.66, so we can use any one value from that, i choose K as 5 and train the model with full training data
+    </a>
+   </li>
+  </ul>
+ </li>
 </ul>
 
     </nav>
@@ -370,7 +401,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>KNN (using scikit-learn) on Iris dataset.</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -379,7 +410,36 @@ title="Print to PDF"
                             <h2> Contents </h2>
                         </div>
                         <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   KNN (using scikit-learn) on Iris dataset.
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#building-a-model-to-classify-the-species-of-iris-flower-based-on-the-sepal-length-speal-width-petal-length-and-petal-width">
+     Building a model to classify the species of Iris flower based on the sepal length, speal width, petal length and petal width
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#load-the-iris-data-set-and-check-the-features">
+     Load the Iris data set and check the features
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#train-the-model">
+   Train the Model
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#k-values-with-3-to-19-has-the-same-accuracy-which-is-96-66-so-we-can-use-any-one-value-from-that-i-choose-k-as-5-and-train-the-model-with-full-training-data">
+     K values with 3 to 19 has the same accuracy which is 96.66, so we can use any one value from that, i choose K as 5 and train the model with full training data
+    </a>
+   </li>
+  </ul>
+ </li>
 </ul>
 
                         </nav>
@@ -390,7 +450,12 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="cell docutils container">
+  <p>#KNN</p>
+<section class="tex2jax_ignore mathjax_ignore" id="knn-using-scikit-learn-on-iris-dataset">
+<h1>KNN (using scikit-learn) on Iris dataset.<a class="headerlink" href="#knn-using-scikit-learn-on-iris-dataset" title="Permalink to this headline">#</a></h1>
+<section id="building-a-model-to-classify-the-species-of-iris-flower-based-on-the-sepal-length-speal-width-petal-length-and-petal-width">
+<h2>Building a model to classify the species of Iris flower based on the sepal length, speal width, petal length and petal width<a class="headerlink" href="#building-a-model-to-classify-the-species-of-iris-flower-based-on-the-sepal-length-speal-width-petal-length-and-petal-width" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Data in a csv format, each observation has a 4 measurements/features </span>
 <span class="c1"># and the species type.</span>
@@ -410,16 +475,21 @@ title="Print to PDF"
 ></iframe>
 </div></div>
 </div>
+</section>
+<section id="load-the-iris-data-set-and-check-the-features">
+<h2>Load the Iris data set and check the features<a class="headerlink" href="#load-the-iris-data-set-and-check-the-features" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import the load_iris function from datsets module</span>
+<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Create bunch object containing iris dataset and its attributes.</span>
+<span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -438,7 +508,8 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">iris</span><span class="o">.</span><span class="n">data</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Print the iris data</span>
+<span class="n">iris</span><span class="o">.</span><span class="n">data</span>
 </pre></div>
 </div>
 </div>
@@ -599,7 +670,8 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Names of 4 features (column names)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -690,6 +762,10 @@ title="Print to PDF"
 </div>
 </div>
 </div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="train-the-model">
+<h1>Train the Model<a class="headerlink" href="#train-the-model" title="Permalink to this headline">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># splitting the data into training and test sets (80:20)</span>
@@ -710,6 +786,21 @@ title="Print to PDF"
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(120, 4)
 (30, 4)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shape of new y objects</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(120,)
+(30,)
 </pre></div>
 </div>
 </div>
@@ -788,9 +879,11 @@ title="Print to PDF"
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0, 0.5, &#39;Testing Accuracy&#39;)
 </pre></div>
 </div>
-<img alt="_images/Untitled0_16_1.png" src="_images/Untitled0_16_1.png" />
+<img alt="_images/Tugas3_21_1.png" src="_images/Tugas3_21_1.png" />
 </div>
 </div>
+<section id="k-values-with-3-to-19-has-the-same-accuracy-which-is-96-66-so-we-can-use-any-one-value-from-that-i-choose-k-as-5-and-train-the-model-with-full-training-data">
+<h2>K values with 3 to 19 has the same accuracy which is 96.66, so we can use any one value from that, i choose K as 5 and train the model with full training data<a class="headerlink" href="#k-values-with-3-to-19-has-the-same-accuracy-which-is-96-66-so-we-can-use-any-one-value-from-that-i-choose-k-as-5-and-train-the-model-with-full-training-data" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -827,6 +920,8 @@ setosa
 </div>
 </div>
 </div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -855,6 +950,20 @@ setosa
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="Tugas2.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Diskritisasi</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="markdown-notebooks.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Notebooks with MyST Markdown</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
 </div>
             </footer>
         </div>

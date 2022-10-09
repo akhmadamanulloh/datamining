@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>KNN (using scikit-learn) on Iris dataset. &#8212; Akhmad Amanulloh</title>
+    <title>KKN (K-NEAREST NEIGHBOR) &#8212; Akhmad Amanulloh</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -52,7 +52,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="K-Means on Iris Dataset" href="Tugas4.html" />
+    <link rel="next" title="K-Means Clustering on Iris Datasets" href="Tugas4.html" />
     <link rel="prev" title="DISKRITISASI" href="Tugas2.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -126,17 +126,17 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   KNN (using scikit-learn) on Iris dataset.
+   KKN (K-NEAREST NEIGHBOR)
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Tugas4.html">
-   K-Means on Iris Dataset
+   K-Means Clustering on Iris Datasets
   </a>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="Tugas5.html">
-   Implementasi Naive Bayes  (Tugas 4)
+   Implementasi Naive Bayes
   </a>
  </li>
 </ul>
@@ -341,108 +341,23 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   KNN (using scikit-learn) on Iris dataset.
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#building-a-model-to-classify-the-species-of-iris-flower-based-on-the-sepal-length-speal-width-petal-length-and-petal-width">
-     Building a model to classify the species of Iris flower based on the sepal length, speal width, petal length and petal width
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#load-the-iris-data-set-and-check-the-features">
-     Load the Iris data set and check the features
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#train-the-model">
-   Train the Model
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#k-values-with-3-to-19-has-the-same-accuracy-which-is-96-66-so-we-can-use-any-one-value-from-that-i-choose-k-as-5-and-train-the-model-with-full-training-data">
-     K values with 3 to 19 has the same accuracy which is 96.66, so we can use any one value from that, i choose K as 5 and train the model with full training data
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>KNN (using scikit-learn) on Iris dataset.</h1>
+                <h1>KKN (K-NEAREST NEIGHBOR)</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   KNN (using scikit-learn) on Iris dataset.
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#building-a-model-to-classify-the-species-of-iris-flower-based-on-the-sepal-length-speal-width-petal-length-and-petal-width">
-     Building a model to classify the species of Iris flower based on the sepal length, speal width, petal length and petal width
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#load-the-iris-data-set-and-check-the-features">
-     Load the Iris data set and check the features
-    </a>
-   </li>
-  </ul>
- </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#train-the-model">
-   Train the Model
-  </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#k-values-with-3-to-19-has-the-same-accuracy-which-is-96-66-so-we-can-use-any-one-value-from-that-i-choose-k-as-5-and-train-the-model-with-full-training-data">
-     K values with 3 to 19 has the same accuracy which is 96.66, so we can use any one value from that, i choose K as 5 and train the model with full training data
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -450,16 +365,14 @@ title="Print to PDF"
                 
               <div>
                 
-  <p>#KNN</p>
-<section class="tex2jax_ignore mathjax_ignore" id="knn-using-scikit-learn-on-iris-dataset">
-<h1>KNN (using scikit-learn) on Iris dataset.<a class="headerlink" href="#knn-using-scikit-learn-on-iris-dataset" title="Permalink to this headline">#</a></h1>
-<section id="building-a-model-to-classify-the-species-of-iris-flower-based-on-the-sepal-length-speal-width-petal-length-and-petal-width">
-<h2>Building a model to classify the species of Iris flower based on the sepal length, speal width, petal length and petal width<a class="headerlink" href="#building-a-model-to-classify-the-species-of-iris-flower-based-on-the-sepal-length-speal-width-petal-length-and-petal-width" title="Permalink to this headline">#</a></h2>
+  <section class="tex2jax_ignore mathjax_ignore" id="kkn-k-nearest-neighbor">
+<h1>KKN (K-NEAREST NEIGHBOR)<a class="headerlink" href="#kkn-k-nearest-neighbor" title="Permalink to this headline">#</a></h1>
+<p>KNN (menggunakan scikit-learn) pada dataset Iris.
+Membangun model untuk mengklasifikasikan jenis bunga Iris berdasarkan panjang sepal, lebar speal, panjang petal dan lebar petal</p>
+<p>K-Nearest Neighbor(KNN) adalah suatu metode yang menggunakan algoritma supervised dimana hasil dari Query instance yang baru diklasifikasikan berdasarkan mayoritas dari kategori pada KNN. Tujuan dari algoritma ini adalah mengklasifikasikan obyek baru bedasarkan atribut dan training sample. Classifier tidak menggunakan model apapun untuk dicocokkan dan hanya berdasarkan pada memori. Diberikan titik query, akan ditemukan sejumlah k obyek atau (titik training) yang paling dekat dengan titik query. Klasifikasi menggunakan voting terbanyak diantara klasifikasi dari k obyek.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Data in a csv format, each observation has a 4 measurements/features </span>
-<span class="c1"># and the species type.</span>
-<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">IFrame</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">IFrame</span>
 <span class="n">IFrame</span><span class="p">(</span><span class="s1">&#39;http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -475,20 +388,16 @@ title="Print to PDF"
 ></iframe>
 </div></div>
 </div>
-</section>
-<section id="load-the-iris-data-set-and-check-the-features">
-<h2>Load the Iris data set and check the features<a class="headerlink" href="#load-the-iris-data-set-and-check-the-features" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import the load_iris function from datsets module</span>
-<span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.datasets</span> <span class="kn">import</span> <span class="n">load_iris</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Create bunch object containing iris dataset and its attributes.</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Buat objek kumpulan yang berisi set data iris dan atributnya.</span>
 <span class="n">iris</span> <span class="o">=</span> <span class="n">load_iris</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -670,7 +579,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Names of 4 features (column names)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Names of 4 features (nama kolom)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">feature_names</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -683,7 +592,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Integers representing the species: 0 = setosa, 1=versicolor, 2=virginica</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Bilangan bulat yang mewakili spesies: 0 = setosa, 1=versicolor, 2=virginica</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">target</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -727,7 +636,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># we have a total of 150 observations and 4 features</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># kami memiliki total 150 pengamatan dan 4 fitur</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">iris</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -740,9 +649,9 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Feature matrix in a object named X</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fitur matriks dalam objek bernama X</span>
 <span class="n">X</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">data</span>
-<span class="c1"># response vector in a object named y</span>
+<span class="c1"># vektor respons dalam objek bernama y</span>
 <span class="n">y</span> <span class="o">=</span> <span class="n">iris</span><span class="o">.</span><span class="n">target</span>
 </pre></div>
 </div>
@@ -762,13 +671,10 @@ title="Print to PDF"
 </div>
 </div>
 </div>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="train-the-model">
-<h1>Train the Model<a class="headerlink" href="#train-the-model" title="Permalink to this headline">#</a></h1>
+<p><strong>train the model</strong></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># splitting the data into training and test sets (80:20)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># membagi data menjadi set pelatihan dan pengujian (80:20)</span>
 <span class="kn">from</span> <span class="nn">sklearn.model_selection</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="n">X_train</span><span class="p">,</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_train</span><span class="p">,</span><span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span><span class="n">random_state</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 </pre></div>
@@ -777,8 +683,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#shape of train and test objects</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">X_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -792,7 +697,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># shape of new y objects</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># bentuk dari obje baru y </span>
 <span class="nb">print</span><span class="p">(</span><span class="n">y_train</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
@@ -807,12 +712,12 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#import the KNeighborsClassifier class from sklearn</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#impor kelas KNeighborsClassifier dari sklearn</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">KNeighborsClassifier</span>
 
-<span class="c1">#import metrics model to check the accuracy </span>
+<span class="c1">#impor model metrik untuk memeriksa keakuratannya</span>
 <span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">metrics</span>
-<span class="c1">#Try running from k=1 through 25 and record testing accuracy</span>
+<span class="c1">#Coba jalankan dari k=1 hingga 25 dan catat akurasi pengujian</span>
 <span class="n">k_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">26</span><span class="p">)</span>
 <span class="n">scores</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">scores_list</span> <span class="o">=</span> <span class="p">[]</span>
@@ -828,7 +733,7 @@ title="Print to PDF"
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Testing accuracy for each value of K</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Pengujian akurasi untuk setiap nilai K</span>
 <span class="n">scores</span>
 </pre></div>
 </div>
@@ -868,7 +773,7 @@ title="Print to PDF"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">matplotlib</span> inline
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 
-<span class="c1">#plot the relationship between K and the testing accuracy</span>
+<span class="c1">#plot hubungan antara K dan akurasi pengujian</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">k_range</span><span class="p">,</span><span class="n">scores_list</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Value of K for KNN&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Testing Accuracy&#39;</span><span class="p">)</span>
@@ -882,8 +787,7 @@ title="Print to PDF"
 <img alt="_images/Tugas3_21_1.png" src="_images/Tugas3_21_1.png" />
 </div>
 </div>
-<section id="k-values-with-3-to-19-has-the-same-accuracy-which-is-96-66-so-we-can-use-any-one-value-from-that-i-choose-k-as-5-and-train-the-model-with-full-training-data">
-<h2>K values with 3 to 19 has the same accuracy which is 96.66, so we can use any one value from that, i choose K as 5 and train the model with full training data<a class="headerlink" href="#k-values-with-3-to-19-has-the-same-accuracy-which-is-96-66-so-we-can-use-any-one-value-from-that-i-choose-k-as-5-and-train-the-model-with-full-training-data" title="Permalink to this headline">#</a></h2>
+<p>Nilai K dengan 3 sampai 19 memiliki akurasi yang sama yaitu 96,66, jadi kita dapat menggunakan salah satu nilai dari itu, saya memilih K sebagai 5 dan melatih model dengan data pelatihan penuh</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">knn</span> <span class="o">=</span> <span class="n">KNeighborsClassifier</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -902,8 +806,8 @@ title="Print to PDF"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#0 = setosa, 1=versicolor, 2=virginica</span>
 <span class="n">classes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span><span class="s1">&#39;setosa&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="s1">&#39;versicolor&#39;</span><span class="p">,</span><span class="mi">2</span><span class="p">:</span><span class="s1">&#39;virginica&#39;</span><span class="p">}</span>
 
-<span class="c1">#Making prediction on some unseen data </span>
-<span class="c1">#predict for the below two random observations</span>
+<span class="c1">#Membuat prediksi pada beberapa data yang tidak terlihat</span>
+<span class="c1">#prediksi untuk dua pengamatan acak di bawah ini</span>
 <span class="n">x_new</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
          <span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]]</span>
 <span class="n">y_predict</span> <span class="o">=</span> <span class="n">knn</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">x_new</span><span class="p">)</span>
@@ -920,7 +824,6 @@ setosa
 </div>
 </div>
 </div>
-</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -960,7 +863,7 @@ setosa
     <a class='right-next' id="next-link" href="Tugas4.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">K-Means on Iris Dataset</p>
+        <p class="prev-next-title">K-Means Clustering on Iris Datasets</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

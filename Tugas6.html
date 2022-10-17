@@ -367,27 +367,15 @@ title="Print to PDF"
     </div>
     <nav id="bd-toc-nav" aria-label="Page">
         <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   KNN dan Decision Tree (UTS)
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#metode-knn">
+   Metode KNN
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#uts">
-   UTS
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#metode-pohon-keputusan-desision-tree">
+   Metode Pohon Keputusan (Desision Tree)
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#metode-knn">
-     Metode KNN
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#metode-pohon-keputusan-desision-tree">
-     Metode Pohon Keputusan (Desision Tree)
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -408,27 +396,15 @@ title="Print to PDF"
                         </div>
                         <nav aria-label="Page">
                             <ul class="visible nav section-nav flex-column">
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#">
-   KNN dan Decision Tree (UTS)
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#metode-knn">
+   Metode KNN
   </a>
  </li>
- <li class="toc-h1 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#uts">
-   UTS
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#metode-pohon-keputusan-desision-tree">
+   Metode Pohon Keputusan (Desision Tree)
   </a>
-  <ul class="visible nav section-nav flex-column">
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#metode-knn">
-     Metode KNN
-    </a>
-   </li>
-   <li class="toc-h2 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#metode-pohon-keputusan-desision-tree">
-     Metode Pohon Keputusan (Desision Tree)
-    </a>
-   </li>
-  </ul>
  </li>
 </ul>
 
@@ -442,9 +418,6 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="knn-dan-decision-tree-uts">
 <h1>KNN dan Decision Tree (UTS)<a class="headerlink" href="#knn-dan-decision-tree-uts" title="Permalink to this headline">#</a></h1>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="uts">
-<h1>UTS<a class="headerlink" href="#uts" title="Permalink to this headline">#</a></h1>
 <p>Lakukan analisa terhadap data pada  <a class="reference external" href="https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Coimbra">https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Coimbra</a>  dengan menggunakan klasifikasi</p>
 <ul class="simple">
 <li><p>metode KNN</p></li>
@@ -453,9 +426,6 @@ title="Print to PDF"
 <p>Proses analisa dilaporkan dan diupload di github ( menggunakan jupyter book)</p>
 <section id="metode-knn">
 <h2>Metode KNN<a class="headerlink" href="#metode-knn" title="Permalink to this headline">#</a></h2>
-<ol class="simple">
-<li><p>Ambil Data terlebih dahulu</p></li>
-</ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
@@ -467,7 +437,7 @@ title="Print to PDF"
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-3b6ffad7-057b-405d-a9d5-67c10024147e">
+  <div id="df-123c1329-5e9e-4a0a-b6a8-5f8937168db9">
     <div class="colab-df-container">
       <div>
 <style scoped>
@@ -568,7 +538,7 @@ title="Print to PDF"
   </tbody>
 </table>
 </div>
-      <button class="colab-df-convert" onclick="convertToInteractive('df-3b6ffad7-057b-405d-a9d5-67c10024147e')"
+      <button class="colab-df-convert" onclick="convertToInteractive('df-123c1329-5e9e-4a0a-b6a8-5f8937168db9')"
               title="Convert this dataframe to an interactive table."
               style="display:none;">
 
@@ -619,12 +589,12 @@ title="Print to PDF"
 
       <script>
         const buttonEl =
-          document.querySelector('#df-3b6ffad7-057b-405d-a9d5-67c10024147e button.colab-df-convert');
+          document.querySelector('#df-123c1329-5e9e-4a0a-b6a8-5f8937168db9 button.colab-df-convert');
         buttonEl.style.display =
           google.colab.kernel.accessAllowed ? 'block' : 'none';
 
         async function convertToInteractive(key) {
-          const element = document.querySelector('#df-3b6ffad7-057b-405d-a9d5-67c10024147e');
+          const element = document.querySelector('#df-123c1329-5e9e-4a0a-b6a8-5f8937168db9');
           const dataTable =
             await google.colab.kernel.invokeFunction('convertToInteractive',
                                                      [key], {});
@@ -645,9 +615,6 @@ title="Print to PDF"
   </div>
 </div></div>
 </div>
-<ol class="simple">
-<li><p>lakukan drop pada kolom untuk kelas pada data</p></li>
-</ol>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#create a dataframe with all training data except the target column</span>
@@ -659,7 +626,7 @@ title="Print to PDF"
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-23fdcfe6-104b-41c9-a882-ce8c95bcb366">
+  <div id="df-7654cff4-2a98-47d1-91e3-c6777000beb8">
     <div class="colab-df-container">
       <div>
 <style scoped>
@@ -754,7 +721,7 @@ title="Print to PDF"
   </tbody>
 </table>
 </div>
-      <button class="colab-df-convert" onclick="convertToInteractive('df-23fdcfe6-104b-41c9-a882-ce8c95bcb366')"
+      <button class="colab-df-convert" onclick="convertToInteractive('df-7654cff4-2a98-47d1-91e3-c6777000beb8')"
               title="Convert this dataframe to an interactive table."
               style="display:none;">
 
@@ -805,12 +772,12 @@ title="Print to PDF"
 
       <script>
         const buttonEl =
-          document.querySelector('#df-23fdcfe6-104b-41c9-a882-ce8c95bcb366 button.colab-df-convert');
+          document.querySelector('#df-7654cff4-2a98-47d1-91e3-c6777000beb8 button.colab-df-convert');
         buttonEl.style.display =
           google.colab.kernel.accessAllowed ? 'block' : 'none';
 
         async function convertToInteractive(key) {
-          const element = document.querySelector('#df-23fdcfe6-104b-41c9-a882-ce8c95bcb366');
+          const element = document.querySelector('#df-7654cff4-2a98-47d1-91e3-c6777000beb8');
           const dataTable =
             await google.colab.kernel.invokeFunction('convertToInteractive',
                                                      [key], {});
@@ -987,7 +954,7 @@ cv_scores mean:0.5173913043478261
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-e9b4e6b6-f741-4c12-818f-57d3d8d68a98">
+  <div id="df-5c7f22a6-7312-48dc-933e-614087fbd300">
     <div class="colab-df-container">
       <div>
 <style scoped>
@@ -1088,7 +1055,7 @@ cv_scores mean:0.5173913043478261
   </tbody>
 </table>
 </div>
-      <button class="colab-df-convert" onclick="convertToInteractive('df-e9b4e6b6-f741-4c12-818f-57d3d8d68a98')"
+      <button class="colab-df-convert" onclick="convertToInteractive('df-5c7f22a6-7312-48dc-933e-614087fbd300')"
               title="Convert this dataframe to an interactive table."
               style="display:none;">
 
@@ -1139,12 +1106,12 @@ cv_scores mean:0.5173913043478261
 
       <script>
         const buttonEl =
-          document.querySelector('#df-e9b4e6b6-f741-4c12-818f-57d3d8d68a98 button.colab-df-convert');
+          document.querySelector('#df-5c7f22a6-7312-48dc-933e-614087fbd300 button.colab-df-convert');
         buttonEl.style.display =
           google.colab.kernel.accessAllowed ? 'block' : 'none';
 
         async function convertToInteractive(key) {
-          const element = document.querySelector('#df-e9b4e6b6-f741-4c12-818f-57d3d8d68a98');
+          const element = document.querySelector('#df-5c7f22a6-7312-48dc-933e-614087fbd300');
           const dataTable =
             await google.colab.kernel.invokeFunction('convertToInteractive',
                                                      [key], {});
@@ -1178,10 +1145,10 @@ cv_scores mean:0.5173913043478261
   warnings.warn(msg, UserWarning)
 </pre></div>
 </div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.FacetGrid at 0x7f7c23d1a250&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;seaborn.axisgrid.FacetGrid at 0x7fd77d896810&gt;
 </pre></div>
 </div>
-<img alt="_images/Tugas6_17_2.png" src="_images/Tugas6_17_2.png" />
+<img alt="_images/Tugas6_16_2.png" src="_images/Tugas6_16_2.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1195,7 +1162,7 @@ cv_scores mean:0.5173913043478261
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-289166bd-730a-447c-8db5-9ca2b0776056">
+  <div id="df-7a2b4268-7a93-4fbc-aaa5-faca75d120a6">
     <div class="colab-df-container">
       <div>
 <style scoped>
@@ -1303,7 +1270,7 @@ cv_scores mean:0.5173913043478261
 </table>
 <p>116 rows × 4 columns</p>
 </div>
-      <button class="colab-df-convert" onclick="convertToInteractive('df-289166bd-730a-447c-8db5-9ca2b0776056')"
+      <button class="colab-df-convert" onclick="convertToInteractive('df-7a2b4268-7a93-4fbc-aaa5-faca75d120a6')"
               title="Convert this dataframe to an interactive table."
               style="display:none;">
 
@@ -1354,12 +1321,12 @@ cv_scores mean:0.5173913043478261
 
       <script>
         const buttonEl =
-          document.querySelector('#df-289166bd-730a-447c-8db5-9ca2b0776056 button.colab-df-convert');
+          document.querySelector('#df-7a2b4268-7a93-4fbc-aaa5-faca75d120a6 button.colab-df-convert');
         buttonEl.style.display =
           google.colab.kernel.accessAllowed ? 'block' : 'none';
 
         async function convertToInteractive(key) {
-          const element = document.querySelector('#df-289166bd-730a-447c-8db5-9ca2b0776056');
+          const element = document.querySelector('#df-7a2b4268-7a93-4fbc-aaa5-faca75d120a6');
           const dataTable =
             await google.colab.kernel.invokeFunction('convertToInteractive',
                                                      [key], {});
@@ -1415,7 +1382,7 @@ Name: HOMA, Length: 116, dtype: float64
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-2202a0f5-da3f-479a-8b4b-038f4b4b3b28">
+  <div id="df-c5d8b110-e58d-4df3-9fd1-9e5b5868fd49">
     <div class="colab-df-container">
       <div>
 <style scoped>
@@ -1523,7 +1490,7 @@ Name: HOMA, Length: 116, dtype: float64
 </table>
 <p>81 rows × 4 columns</p>
 </div>
-      <button class="colab-df-convert" onclick="convertToInteractive('df-2202a0f5-da3f-479a-8b4b-038f4b4b3b28')"
+      <button class="colab-df-convert" onclick="convertToInteractive('df-c5d8b110-e58d-4df3-9fd1-9e5b5868fd49')"
               title="Convert this dataframe to an interactive table."
               style="display:none;">
 
@@ -1574,12 +1541,12 @@ Name: HOMA, Length: 116, dtype: float64
 
       <script>
         const buttonEl =
-          document.querySelector('#df-2202a0f5-da3f-479a-8b4b-038f4b4b3b28 button.colab-df-convert');
+          document.querySelector('#df-c5d8b110-e58d-4df3-9fd1-9e5b5868fd49 button.colab-df-convert');
         buttonEl.style.display =
           google.colab.kernel.accessAllowed ? 'block' : 'none';
 
         async function convertToInteractive(key) {
-          const element = document.querySelector('#df-2202a0f5-da3f-479a-8b4b-038f4b4b3b28');
+          const element = document.querySelector('#df-c5d8b110-e58d-4df3-9fd1-9e5b5868fd49');
           const dataTable =
             await google.colab.kernel.invokeFunction('convertToInteractive',
                                                      [key], {});
@@ -1625,7 +1592,7 @@ Name: HOMA, Length: 116, dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Tugas6_22_0.png" src="_images/Tugas6_22_0.png" />
+<img alt="_images/Tugas6_21_0.png" src="_images/Tugas6_21_0.png" />
 </div>
 </div>
 </section>

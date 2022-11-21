@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>&lt;no title&gt; &#8212; Akhmad Amanulloh</title>
+    <title>REGRESI LINIER &#8212; Akhmad Amanulloh</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -112,7 +112,7 @@ const thebe_selector_output = ".output, .cell_output"
                 </a>
             </li>
         </ul>
-        <ul class="nav bd-sidenav">
+        <ul class="current nav bd-sidenav">
  <li class="toctree-l1">
   <a class="reference internal" href="notebooks.html">
    Statistik Diskriptif
@@ -151,6 +151,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="Tugas8.html">
    Messidor Features
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   REGRESI LINIER
   </a>
  </li>
 </ul>
@@ -355,50 +360,23 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
-<label for="__page-toc"
-  class="headerbtn headerbtn-page-toc"
-  
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-list"></i>
-  </span>
-
-</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
-    <div class="tocsection onthispage pt-5 pb-3">
-        <i class="fas fa-list"></i> Contents
-    </div>
-    <nav id="bd-toc-nav" aria-label="Page">
-        <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1><no title></h1>
+                <h1>REGRESI LINIER</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
-                        <div>
-                            <h2> Contents </h2>
-                        </div>
-                        <nav aria-label="Page">
-                            <ul class="simple visible nav section-nav flex-column">
-</ul>
-
-                        </nav>
                     </div>
                 </div>
             </div>
@@ -406,7 +384,9 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="cell docutils container">
+  <section class="tex2jax_ignore mathjax_ignore" id="regresi-linier">
+<h1>REGRESI LINIER<a class="headerlink" href="#regresi-linier" title="Permalink to this headline">#</a></h1>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">LinearRegression</span>
@@ -425,7 +405,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([99.36354604])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([289.37991554])
 </pre></div>
 </div>
 </div>
@@ -456,7 +436,7 @@ title="Print to PDF"
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-15c072be-27d1-4820-9519-372dd98a9eb9">
+  <div id="df-02e14e74-45e0-4867-8095-dec2a7736dd0">
     <div class="colab-df-container">
       <div>
 <style scoped>
@@ -483,108 +463,108 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>[-0.6214640350965732]</td>
-      <td>-14.145451</td>
+      <td>[-0.5221907667952662]</td>
+      <td>-62.748957</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[1.7689915289992477]</td>
-      <td>54.237277</td>
+      <td>[1.0744754128550142]</td>
+      <td>87.544438</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[-0.12145339053377542]</td>
-      <td>-3.483658</td>
+      <td>[-0.7138126653418128]</td>
+      <td>-66.255176</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[-0.46777888002426354]</td>
-      <td>-26.584292</td>
+      <td>[-0.6060759877485278]</td>
+      <td>-62.342758</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>[-0.3546691509333373]</td>
-      <td>-13.683717</td>
+      <td>[-1.495678047525724]</td>
+      <td>-130.601213</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>[-0.3121079983971259]</td>
-      <td>-5.626984</td>
+      <td>[0.395457892059066]</td>
+      <td>42.059653</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>[-0.6426453270202032]</td>
-      <td>-36.492369</td>
+      <td>[0.24966050211447108]</td>
+      <td>23.296101</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>[0.7877832767438105]</td>
-      <td>39.550364</td>
+      <td>[0.11132570708852814]</td>
+      <td>14.448778</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>[-1.5385910819616386]</td>
-      <td>-47.714172</td>
+      <td>[0.5586058738979846]</td>
+      <td>67.930053</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>[-0.8537729650202425]</td>
-      <td>-32.855392</td>
+      <td>[-0.16154124692730681]</td>
+      <td>-17.232471</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>[-1.8909954639246558]</td>
-      <td>-67.911869</td>
+      <td>[0.7879264816281178]</td>
+      <td>67.869112</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>[0.29101075931712317]</td>
-      <td>21.930040</td>
+      <td>[-0.8955645790430985]</td>
+      <td>-86.805659</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>[-0.9877173136579936]</td>
-      <td>-57.103974</td>
+      <td>[1.9993211285019348]</td>
+      <td>196.988524</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>[-1.076262458771197]</td>
-      <td>-41.321915</td>
+      <td>[-0.8276771471517783]</td>
+      <td>-83.021177</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>[-0.6571214248785588]</td>
-      <td>-11.499790</td>
+      <td>[-0.8908260369241324]</td>
+      <td>-84.829964</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>[0.8539905163277788]</td>
-      <td>22.842149</td>
+      <td>[-0.21842929969938174]</td>
+      <td>-14.601500</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>[-0.2751998708962496]</td>
-      <td>5.693123</td>
+      <td>[0.41641334690346765]</td>
+      <td>41.677863</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>[0.6487820545200956]</td>
-      <td>1.924475</td>
+      <td>[0.8162011015977917]</td>
+      <td>70.905222</td>
     </tr>
     <tr>
       <th>18</th>
-      <td>[-1.3250487343764095]</td>
-      <td>-30.816744</td>
+      <td>[-0.2368264411284683]</td>
+      <td>-31.164462</td>
     </tr>
     <tr>
       <th>19</th>
-      <td>[-0.06407628403292641]</td>
-      <td>-1.375034</td>
+      <td>[2.4182112164550285]</td>
+      <td>242.634966</td>
     </tr>
   </tbody>
 </table>
 </div>
-      <button class="colab-df-convert" onclick="convertToInteractive('df-15c072be-27d1-4820-9519-372dd98a9eb9')"
+      <button class="colab-df-convert" onclick="convertToInteractive('df-02e14e74-45e0-4867-8095-dec2a7736dd0')"
               title="Convert this dataframe to an interactive table."
               style="display:none;">
 
@@ -635,12 +615,12 @@ title="Print to PDF"
 
       <script>
         const buttonEl =
-          document.querySelector('#df-15c072be-27d1-4820-9519-372dd98a9eb9 button.colab-df-convert');
+          document.querySelector('#df-02e14e74-45e0-4867-8095-dec2a7736dd0 button.colab-df-convert');
         buttonEl.style.display =
           google.colab.kernel.accessAllowed ? 'block' : 'none';
 
         async function convertToInteractive(key) {
-          const element = document.querySelector('#df-15c072be-27d1-4820-9519-372dd98a9eb9');
+          const element = document.querySelector('#df-02e14e74-45e0-4867-8095-dec2a7736dd0');
           const dataTable =
             await google.colab.kernel.invokeFunction('convertToInteractive',
                                                      [key], {});
@@ -668,7 +648,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([33.389648])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([96.49719721])
 </pre></div>
 </div>
 </div>
@@ -680,7 +660,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.8053979529338875
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.11167608065832901
 </pre></div>
 </div>
 </div>
@@ -695,9 +675,10 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Tugas9_6_0.png" src="_images/Tugas9_6_0.png" />
+<img alt="_images/Tugas9_7_0.png" src="_images/Tugas9_7_0.png" />
 </div>
 </div>
+</section>
 
     <script type="text/x-thebe-config">
     {

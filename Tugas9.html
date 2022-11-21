@@ -386,6 +386,7 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="regresi-linier">
 <h1>REGRESI LINIER<a class="headerlink" href="#regresi-linier" title="Permalink to this headline">#</a></h1>
+<p>Regresi linear adalah teknik analisis data yang memprediksi nilai data yang tidak diketahui dengan menggunakan nilai data lain yang terkait dan diketahui. Secara matematis memodelkan variabel yang tidak diketahui atau tergantung dan variabel yang dikenal atau independen sebagai persamaan linier. Misalnya, anggaplah Anda memiliki data tentang pengeluaran dan pendapatan Anda untuk tahun lalu. Teknik regresi linier menganalisis data ini dan menentukan bahwa pengeluaran Anda adalah setengah dari penghasilan Anda. Mereka kemudian menghitung biaya masa depan yang tidak diketahui dengan mengurangi separuh pendapatan yang diketahui di masa depan.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -405,7 +406,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([289.37991554])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([208.58296179])
 </pre></div>
 </div>
 </div>
@@ -436,7 +437,7 @@ title="Print to PDF"
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-02e14e74-45e0-4867-8095-dec2a7736dd0">
+  <div id="df-e7d3e388-930f-4fe8-afe8-2d52c3098d49">
     <div class="colab-df-container">
       <div>
 <style scoped>
@@ -463,108 +464,108 @@ title="Print to PDF"
   <tbody>
     <tr>
       <th>0</th>
-      <td>[-0.5221907667952662]</td>
-      <td>-62.748957</td>
+      <td>[1.0064776290069222]</td>
+      <td>77.601053</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>[1.0744754128550142]</td>
-      <td>87.544438</td>
+      <td>[0.5396521004690461]</td>
+      <td>53.474146</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>[-0.7138126653418128]</td>
-      <td>-66.255176</td>
+      <td>[-2.2151182370187144]</td>
+      <td>-164.407486</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>[-0.6060759877485278]</td>
-      <td>-62.342758</td>
+      <td>[0.21374760072368917]</td>
+      <td>-2.291079</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>[-1.495678047525724]</td>
-      <td>-130.601213</td>
+      <td>[0.4206326320308736]</td>
+      <td>11.333484</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>[0.395457892059066]</td>
-      <td>42.059653</td>
+      <td>[-1.4700134399789335]</td>
+      <td>-109.984513</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>[0.24966050211447108]</td>
-      <td>23.296101</td>
+      <td>[1.1998207275463233]</td>
+      <td>65.317036</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>[0.11132570708852814]</td>
-      <td>14.448778</td>
+      <td>[-1.1776950292659962]</td>
+      <td>-85.910539</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>[0.5586058738979846]</td>
-      <td>67.930053</td>
+      <td>[-0.4642698916089416]</td>
+      <td>-38.335578</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>[-0.16154124692730681]</td>
-      <td>-17.232471</td>
+      <td>[-1.8450092133770881]</td>
+      <td>-154.999001</td>
     </tr>
     <tr>
       <th>10</th>
-      <td>[0.7879264816281178]</td>
-      <td>67.869112</td>
+      <td>[-0.9813831737685778]</td>
+      <td>-72.744886</td>
     </tr>
     <tr>
       <th>11</th>
-      <td>[-0.8955645790430985]</td>
-      <td>-86.805659</td>
+      <td>[0.8305605634839868]</td>
+      <td>56.303816</td>
     </tr>
     <tr>
       <th>12</th>
-      <td>[1.9993211285019348]</td>
-      <td>196.988524</td>
+      <td>[-0.5470158995907325]</td>
+      <td>-29.710318</td>
     </tr>
     <tr>
       <th>13</th>
-      <td>[-0.8276771471517783]</td>
-      <td>-83.021177</td>
+      <td>[-0.3535856764405196]</td>
+      <td>-22.931086</td>
     </tr>
     <tr>
       <th>14</th>
-      <td>[-0.8908260369241324]</td>
-      <td>-84.829964</td>
+      <td>[-1.4922512714986205]</td>
+      <td>-103.114987</td>
     </tr>
     <tr>
       <th>15</th>
-      <td>[-0.21842929969938174]</td>
-      <td>-14.601500</td>
+      <td>[-0.7582672089892557]</td>
+      <td>-48.189796</td>
     </tr>
     <tr>
       <th>16</th>
-      <td>[0.41641334690346765]</td>
-      <td>41.677863</td>
+      <td>[0.5030053069439777]</td>
+      <td>31.471412</td>
     </tr>
     <tr>
       <th>17</th>
-      <td>[0.8162011015977917]</td>
-      <td>70.905222</td>
+      <td>[0.3423659913829826]</td>
+      <td>34.636764</td>
     </tr>
     <tr>
       <th>18</th>
-      <td>[-0.2368264411284683]</td>
-      <td>-31.164462</td>
+      <td>[-1.0497169950140046]</td>
+      <td>-76.650944</td>
     </tr>
     <tr>
       <th>19</th>
-      <td>[2.4182112164550285]</td>
-      <td>242.634966</td>
+      <td>[3.1321317945872287]</td>
+      <td>211.125765</td>
     </tr>
   </tbody>
 </table>
 </div>
-      <button class="colab-df-convert" onclick="convertToInteractive('df-02e14e74-45e0-4867-8095-dec2a7736dd0')"
+      <button class="colab-df-convert" onclick="convertToInteractive('df-e7d3e388-930f-4fe8-afe8-2d52c3098d49')"
               title="Convert this dataframe to an interactive table."
               style="display:none;">
 
@@ -615,12 +616,12 @@ title="Print to PDF"
 
       <script>
         const buttonEl =
-          document.querySelector('#df-02e14e74-45e0-4867-8095-dec2a7736dd0 button.colab-df-convert');
+          document.querySelector('#df-e7d3e388-930f-4fe8-afe8-2d52c3098d49 button.colab-df-convert');
         buttonEl.style.display =
           google.colab.kernel.accessAllowed ? 'block' : 'none';
 
         async function convertToInteractive(key) {
-          const element = document.querySelector('#df-02e14e74-45e0-4867-8095-dec2a7736dd0');
+          const element = document.querySelector('#df-e7d3e388-930f-4fe8-afe8-2d52c3098d49');
           const dataTable =
             await google.colab.kernel.invokeFunction('convertToInteractive',
                                                      [key], {});
@@ -648,7 +649,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([96.49719721])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([70.74885153])
 </pre></div>
 </div>
 </div>
@@ -660,7 +661,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.11167608065832901
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-3.6635927880455306
 </pre></div>
 </div>
 </div>
@@ -675,7 +676,7 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/Tugas9_7_0.png" src="_images/Tugas9_7_0.png" />
+<img alt="_images/Tugas9_8_0.png" src="_images/Tugas9_8_0.png" />
 </div>
 </div>
 </section>

@@ -62,6 +62,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'ekstraksi_kata_kunci';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -400,6 +402,11 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#term-frequency">Term Frequency</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pagerank">Pagerank</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algoritma-pagerank"><strong>Algoritma Pagerank</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-manual-pagerank"><strong>Contoh manual Pagerank</strong></a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -418,6 +425,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">nltk</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.feature_extraction.text</span> <span class="kn">import</span> <span class="n">CountVectorizer</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">import</span> <span class="nn">networkx</span> <span class="k">as</span> <span class="nn">nx</span>
@@ -496,7 +504,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-4fefcc64-f12f-4f44-9ac9-13c6c69b5161" class="colab-df-container">
+  <div id="df-c61735b5-7643-48d6-b64a-999220f5d901" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -647,7 +655,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-4fefcc64-f12f-4f44-9ac9-13c6c69b5161')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-c61735b5-7643-48d6-b64a-999220f5d901')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -699,12 +707,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-4fefcc64-f12f-4f44-9ac9-13c6c69b5161 button.colab-df-convert');
+        document.querySelector('#df-c61735b5-7643-48d6-b64a-999220f5d901 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-4fefcc64-f12f-4f44-9ac9-13c6c69b5161');
+        const element = document.querySelector('#df-c61735b5-7643-48d6-b64a-999220f5d901');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -724,8 +732,8 @@ document.write(`
   </div>
 
 
-<div id="df-68b71fef-39c8-474d-805e-c1f480dbbde3">
-  <button class="colab-df-quickchart" onclick="quickchart('df-68b71fef-39c8-474d-805e-c1f480dbbde3')"
+<div id="df-43543cfc-a710-4a86-b54c-a3427ba0ee92">
+  <button class="colab-df-quickchart" onclick="quickchart('df-43543cfc-a710-4a86-b54c-a3427ba0ee92')"
             title="Suggest charts"
             style="display:none;">
 
@@ -844,7 +852,7 @@ document.write(`
     }
     (() => {
       let quickchartButtonEl =
-        document.querySelector('#df-68b71fef-39c8-474d-805e-c1f480dbbde3 button');
+        document.querySelector('#df-43543cfc-a710-4a86-b54c-a3427ba0ee92 button');
       quickchartButtonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
     })();
@@ -863,7 +871,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-33c72af2-6b3a-4eea-b856-14ae4354fc37" class="colab-df-container">
+  <div id="df-43340c47-85d0-43cf-944f-c536a0f6fcbf" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -900,7 +908,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-33c72af2-6b3a-4eea-b856-14ae4354fc37')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-43340c47-85d0-43cf-944f-c536a0f6fcbf')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -952,12 +960,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-33c72af2-6b3a-4eea-b856-14ae4354fc37 button.colab-df-convert');
+        document.querySelector('#df-43340c47-85d0-43cf-944f-c536a0f6fcbf button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-33c72af2-6b3a-4eea-b856-14ae4354fc37');
+        const element = document.querySelector('#df-43340c47-85d0-43cf-944f-c536a0f6fcbf');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -999,7 +1007,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-5de8610a-29f6-4fbe-a7be-2f8434d08fe6" class="colab-df-container">
+  <div id="df-34bc0d3a-5633-4a78-92cd-701e522f41fa" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1032,7 +1040,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-5de8610a-29f6-4fbe-a7be-2f8434d08fe6')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-34bc0d3a-5633-4a78-92cd-701e522f41fa')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -1084,12 +1092,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-5de8610a-29f6-4fbe-a7be-2f8434d08fe6 button.colab-df-convert');
+        document.querySelector('#df-34bc0d3a-5633-4a78-92cd-701e522f41fa button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-5de8610a-29f6-4fbe-a7be-2f8434d08fe6');
+        const element = document.querySelector('#df-34bc0d3a-5633-4a78-92cd-701e522f41fa');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1135,7 +1143,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-1e7b1741-5cee-434a-9f89-9694c87398db" class="colab-df-container">
+  <div id="df-03e3522c-5c34-44bd-ac15-1dafbaaa590e" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1168,7 +1176,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-1e7b1741-5cee-434a-9f89-9694c87398db')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-03e3522c-5c34-44bd-ac15-1dafbaaa590e')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -1220,12 +1228,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-1e7b1741-5cee-434a-9f89-9694c87398db button.colab-df-convert');
+        document.querySelector('#df-03e3522c-5c34-44bd-ac15-1dafbaaa590e button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-1e7b1741-5cee-434a-9f89-9694c87398db');
+        const element = document.querySelector('#df-03e3522c-5c34-44bd-ac15-1dafbaaa590e');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1266,7 +1274,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-af2eeb82-e596-42d9-94ce-a3ef5f3f19b2" class="colab-df-container">
+  <div id="df-60cb6431-8ee8-48c8-a133-39e3013534b6" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1580,7 +1588,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-af2eeb82-e596-42d9-94ce-a3ef5f3f19b2')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-60cb6431-8ee8-48c8-a133-39e3013534b6')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -1632,12 +1640,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-af2eeb82-e596-42d9-94ce-a3ef5f3f19b2 button.colab-df-convert');
+        document.querySelector('#df-60cb6431-8ee8-48c8-a133-39e3013534b6 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-af2eeb82-e596-42d9-94ce-a3ef5f3f19b2');
+        const element = document.querySelector('#df-60cb6431-8ee8-48c8-a133-39e3013534b6');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1657,8 +1665,8 @@ document.write(`
   </div>
 
 
-<div id="df-1eba4e1a-2924-48e7-bfde-c920a59e20d9">
-  <button class="colab-df-quickchart" onclick="quickchart('df-1eba4e1a-2924-48e7-bfde-c920a59e20d9')"
+<div id="df-5b29ff50-8e3f-4ab0-89ee-1f607f527198">
+  <button class="colab-df-quickchart" onclick="quickchart('df-5b29ff50-8e3f-4ab0-89ee-1f607f527198')"
             title="Suggest charts"
             style="display:none;">
 
@@ -1777,7 +1785,7 @@ document.write(`
     }
     (() => {
       let quickchartButtonEl =
-        document.querySelector('#df-1eba4e1a-2924-48e7-bfde-c920a59e20d9 button');
+        document.querySelector('#df-5b29ff50-8e3f-4ab0-89ee-1f607f527198 button');
       quickchartButtonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
     })();
@@ -1790,45 +1798,77 @@ document.write(`
 <p>Pembentukan Graph : Setiap kata yang memiliki hubungan dengan kata lain dan nilai Term frequency lebih dari 5 akan dibentuk node yang saling terhubung</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">Graph</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
 <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">df_co_occurrence</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">df_co_occurrence</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
         <span class="n">weight</span> <span class="o">=</span> <span class="n">df_co_occurrence</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">weight</span> <span class="o">&gt;</span> <span class="mi">5</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">!=</span> <span class="n">col</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">weight</span> <span class="o">&gt;</span> <span class="mi">16</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">!=</span> <span class="n">col</span><span class="p">:</span>
             <span class="n">G</span><span class="o">.</span><span class="n">add_edge</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">weight</span><span class="o">=</span><span class="n">weight</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p><strong>Pagerank</strong> digunakan untuk menghitung nilai pentingnya suatu kata dalam dokumen. coba</p>
-<p>Graph yang sudah terbentuk akan di hitung nilai pageranknya, dan diambil 3 kata yang memiliki nilai pagerank tertinggi.</p>
+</section>
+<section id="pagerank">
+<h2>Pagerank<a class="headerlink" href="#pagerank" title="Permalink to this heading">#</a></h2>
+<p><strong>PageRank</strong> adalah algoritma yang digunakan oleh mesin pencari, terutama oleh Google, untuk menilai dan memberikan peringkat pada halaman web dalam hasil pencarian. Algoritma ini dikembangkan oleh Larry Page dan Sergey Brin, pendiri Google, dan dinamakan setelah nama Larry Page. PageRank mengukur otoritas atau kepentingan suatu halaman web berdasarkan seberapa banyak halaman lain yang mengaitkan ke halaman tersebut dan seberapa pentingnya halaman-halaman yang memberikan tautan tersebut.</p>
+<p>Dalam kasus kali ini PageRank mengukur otoritas atau kepentingan suatu kata berdasarkan seberapa banyak kata lain yang mengaitkan ke kata tersebut dan seberapa pentingnya kata-kata yang memberikan tautan tersebut.</p>
+<section id="algoritma-pagerank">
+<h3><strong>Algoritma Pagerank</strong><a class="headerlink" href="#algoritma-pagerank" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Identifikasi kata-kata yang akan dievaluasi.</p></li>
+<li><p>Buat graph antar kata dengan tautan antar kata.</p></li>
+<li><p>Inisialisasi pagerank, Setiap halaman web diberikan nilai awal PageRank yang sama.</p></li>
+<li><p>Kemudian lakukan iterasi perhitungan pagerank.</p></li>
+</ol>
+<p><strong>Rumus Pagerank :</strong></p>
+<p><span class="math notranslate nohighlight">\(\text{PR(A)}=\frac{d}{N} + \left( 1 - d\right)\left( \sum_{}^{} \frac{\text{Rank(i)}}{Outlink(i)} \right)\)</span></p>
+<ul class="simple">
+<li><p>PR(i) adalah PageRank dari kata A</p></li>
+<li><p>d adalah faktor damping (biasanya 0.85 untuk Google PageRank)</p></li>
+<li><p>N adalah jumlah total kata</p></li>
+</ul>
+</section>
+<section id="contoh-manual-pagerank">
+<h3><strong>Contoh manual Pagerank</strong><a class="headerlink" href="#contoh-manual-pagerank" title="Permalink to this heading">#</a></h3>
+<p><a class="reference external" href="https://docs.google.com/spreadsheets/d/1UxEkKb5cPNq9R_L12mesVVVeWueRxBxd/edit?usp=sharing&amp;amp;ouid=104180635781972900428&amp;amp;rtpof=true&amp;amp;sd=true">https://docs.google.com/spreadsheets/d/1UxEkKb5cPNq9R_L12mesVVVeWueRxBxd/edit?usp=sharing&amp;ouid=104180635781972900428&amp;rtpof=true&amp;sd=true</a></p>
+<p>Berikut adalah gambar graph yang dihasilkan dari hubungan antar kata yang memiliki nilai TF lebih dari 5</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Menampilkan graf</span>
+<span class="n">pos</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">spring_layout</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">get_edge_attributes</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s1">&#39;weight&#39;</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">node_size</span><span class="o">=</span><span class="mi">700</span><span class="p">,</span> <span class="n">node_color</span><span class="o">=</span><span class="s1">&#39;skyblue&#39;</span><span class="p">,</span> <span class="n">font_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">font_color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">arrowsize</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">nx</span><span class="o">.</span><span class="n">draw_networkx_edge_labels</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">edge_labels</span><span class="o">=</span><span class="n">labels</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Co-occurrence Directed Graph&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/90e2129d658626f8ee03e2a992351cf3cf15bebfeea4811e70f23ec65c666066.png" src="_images/90e2129d658626f8ee03e2a992351cf3cf15bebfeea4811e70f23ec65c666066.png" />
+</div>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pr</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">pagerank</span><span class="p">(</span><span class="n">G</span><span class="p">)</span>
-<span class="n">sorted_d</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span>
+<span class="n">sorted_d</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">pr</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)[:</span><span class="mi">6</span><span class="p">]</span>
 <span class="n">sorted_d</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;pemain&#39;, 0.3125058997596638),
- (&#39;pelatih&#39;, 0.06183536617880139),
- (&#39;bima&#39;, 0.05078651822037831)]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[(&#39;pemain&#39;, 0.41917109326147867),
+ (&#39;pelatih&#39;, 0.17416034872049396),
+ (&#39;bima&#39;, 0.15352190195049228),
+ (&#39;amar&#39;, 0.08438221868917835),
+ (&#39;panama&#39;, 0.08438221868917835),
+ (&#39;timnas&#39;, 0.08438221868917835)]
 </pre></div>
 </div>
 </div>
 </div>
-<p>Berikut adalah gambar graph yang dihasilkan dari hubungan antar kata yang memiliki nilai TF lebih dari 5</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span><span class="n">G</span><span class="p">,</span><span class="n">with_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/ab1bac9107731d4a0ae90ba10686da2656ae5d00a5195f408924abbb95001bba.png" src="_images/ab1bac9107731d4a0ae90ba10686da2656ae5d00a5195f408924abbb95001bba.png" />
-</div>
-</div>
+</section>
 </section>
 </section>
 
@@ -1888,6 +1928,11 @@ document.write(`
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing">Preprocessing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#term-frequency">Term Frequency</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pagerank">Pagerank</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algoritma-pagerank"><strong>Algoritma Pagerank</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contoh-manual-pagerank"><strong>Contoh manual Pagerank</strong></a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

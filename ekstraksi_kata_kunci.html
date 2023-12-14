@@ -67,6 +67,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script>DOCUMENTATION_OPTIONS.pagename = 'ekstraksi_kata_kunci';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="UAS PPW LDA berita" href="UAS_PPW.html" />
     <link rel="prev" title="Closeness Centrality beritajatim" href="closeness_centrality_beritajatim.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -177,6 +178,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1"><a class="reference internal" href="Scraping_beritajatim.html">Scraping beritajatim.com</a></li>
 <li class="toctree-l1"><a class="reference internal" href="closeness_centrality_beritajatim.html">Closeness Centrality beritajatim</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Ekstraksi Kata Kunci</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UAS_PPW.html">UAS PPW LDA berita</a></li>
 </ul>
 
     </div>
@@ -441,11 +443,9 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data] Downloading package stopwords to /root/nltk_data...
-[nltk_data]   Unzipping corpora/stopwords.zip.
+[nltk_data]   Package stopwords is already up-to-date!
 [nltk_data] Downloading package punkt to /root/nltk_data...
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data]   Unzipping tokenizers/punkt.zip.
+[nltk_data]   Package punkt is already up-to-date!
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>True
@@ -507,7 +507,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-c61735b5-7643-48d6-b64a-999220f5d901" class="colab-df-container">
+  <div id="df-a9d5eb4a-8547-4b96-9cc2-c970c7af81f6" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -658,7 +658,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-c61735b5-7643-48d6-b64a-999220f5d901')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-a9d5eb4a-8547-4b96-9cc2-c970c7af81f6')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -710,12 +710,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-c61735b5-7643-48d6-b64a-999220f5d901 button.colab-df-convert');
+        document.querySelector('#df-a9d5eb4a-8547-4b96-9cc2-c970c7af81f6 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-c61735b5-7643-48d6-b64a-999220f5d901');
+        const element = document.querySelector('#df-a9d5eb4a-8547-4b96-9cc2-c970c7af81f6');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -735,8 +735,8 @@ document.write(`
   </div>
 
 
-<div id="df-43543cfc-a710-4a86-b54c-a3427ba0ee92">
-  <button class="colab-df-quickchart" onclick="quickchart('df-43543cfc-a710-4a86-b54c-a3427ba0ee92')"
+<div id="df-48e143c7-42bb-4373-852c-94795ba4c5b8">
+  <button class="colab-df-quickchart" onclick="quickchart('df-48e143c7-42bb-4373-852c-94795ba4c5b8')"
             title="Suggest charts"
             style="display:none;">
 
@@ -855,7 +855,7 @@ document.write(`
     }
     (() => {
       let quickchartButtonEl =
-        document.querySelector('#df-43543cfc-a710-4a86-b54c-a3427ba0ee92 button');
+        document.querySelector('#df-48e143c7-42bb-4373-852c-94795ba4c5b8 button');
       quickchartButtonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
     })();
@@ -874,7 +874,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-43340c47-85d0-43cf-944f-c536a0f6fcbf" class="colab-df-container">
+  <div id="df-cfd3e13e-0bbb-4d5b-97a8-67ddd02ceef9" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -911,7 +911,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-43340c47-85d0-43cf-944f-c536a0f6fcbf')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-cfd3e13e-0bbb-4d5b-97a8-67ddd02ceef9')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -963,12 +963,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-43340c47-85d0-43cf-944f-c536a0f6fcbf button.colab-df-convert');
+        document.querySelector('#df-cfd3e13e-0bbb-4d5b-97a8-67ddd02ceef9 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-43340c47-85d0-43cf-944f-c536a0f6fcbf');
+        const element = document.querySelector('#df-cfd3e13e-0bbb-4d5b-97a8-67ddd02ceef9');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1004,124 +1004,9 @@ document.write(`
 <span class="c1"># Buat kolom tambahan untuk data description yang telah diremovepunctuation</span>
 <span class="n">preprocessing</span> <span class="o">=</span> <span class="n">data1</span><span class="p">[</span><span class="s1">&#39;Isi&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">clean_punct</span><span class="p">)</span>
 <span class="n">clean</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">preprocessing</span><span class="p">)</span>
-<span class="n">clean</span>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output text_html">
-  <div id="df-34bc0d3a-5633-4a78-92cd-701e522f41fa" class="colab-df-container">
-    <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Isi</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>surabaya  beritajatim com   timnas indonesia u...</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-    <div class="colab-df-buttons">
-
-  <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-34bc0d3a-5633-4a78-92cd-701e522f41fa')"
-            title="Convert this dataframe to an interactive table."
-            style="display:none;">
-
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
-    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
-  </svg>
-    </button>
-
-  <style>
-    .colab-df-container {
-      display:flex;
-      gap: 12px;
-    }
-
-    .colab-df-convert {
-      background-color: #E8F0FE;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      fill: #1967D2;
-      height: 32px;
-      padding: 0 0 0 0;
-      width: 32px;
-    }
-
-    .colab-df-convert:hover {
-      background-color: #E2EBFA;
-      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-      fill: #174EA6;
-    }
-
-    .colab-df-buttons div {
-      margin-bottom: 4px;
-    }
-
-    [theme=dark] .colab-df-convert {
-      background-color: #3B4455;
-      fill: #D2E3FC;
-    }
-
-    [theme=dark] .colab-df-convert:hover {
-      background-color: #434B5C;
-      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-      fill: #FFFFFF;
-    }
-  </style>
-
-    <script>
-      const buttonEl =
-        document.querySelector('#df-34bc0d3a-5633-4a78-92cd-701e522f41fa button.colab-df-convert');
-      buttonEl.style.display =
-        google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-      async function convertToInteractive(key) {
-        const element = document.querySelector('#df-34bc0d3a-5633-4a78-92cd-701e522f41fa');
-        const dataTable =
-          await google.colab.kernel.invokeFunction('convertToInteractive',
-                                                    [key], {});
-        if (!dataTable) return;
-
-        const docLinkHtml = 'Like what you see? Visit the ' +
-          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
-          + ' to learn more about interactive tables.';
-        element.innerHTML = '';
-        dataTable['output_type'] = 'display_data';
-        await google.colab.output.renderOutput(dataTable, element);
-        const docLink = document.createElement('div');
-        docLink.innerHTML = docLinkHtml;
-        element.appendChild(docLink);
-      }
-    </script>
-  </div>
-
-    </div>
-  </div>
-</div></div>
 </div>
 <ul class="simple">
 <li><p>Dilakukan proses tokenisasi setiap kalimat.</p></li>
@@ -1146,7 +1031,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-03e3522c-5c34-44bd-ac15-1dafbaaa590e" class="colab-df-container">
+  <div id="df-f5c6fc72-af16-4ba8-8114-a526ac3ad0d5" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1179,7 +1064,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-03e3522c-5c34-44bd-ac15-1dafbaaa590e')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-f5c6fc72-af16-4ba8-8114-a526ac3ad0d5')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -1231,12 +1116,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-03e3522c-5c34-44bd-ac15-1dafbaaa590e button.colab-df-convert');
+        document.querySelector('#df-f5c6fc72-af16-4ba8-8114-a526ac3ad0d5 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-03e3522c-5c34-44bd-ac15-1dafbaaa590e');
+        const element = document.querySelector('#df-f5c6fc72-af16-4ba8-8114-a526ac3ad0d5');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1277,7 +1162,7 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-60cb6431-8ee8-48c8-a133-39e3013534b6" class="colab-df-container">
+  <div id="df-9de32980-4b9a-4c56-b91d-a95fe1117ddd" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1591,7 +1476,7 @@ document.write(`
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-60cb6431-8ee8-48c8-a133-39e3013534b6')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-9de32980-4b9a-4c56-b91d-a95fe1117ddd')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -1643,12 +1528,12 @@ document.write(`
 
     <script>
       const buttonEl =
-        document.querySelector('#df-60cb6431-8ee8-48c8-a133-39e3013534b6 button.colab-df-convert');
+        document.querySelector('#df-9de32980-4b9a-4c56-b91d-a95fe1117ddd button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-60cb6431-8ee8-48c8-a133-39e3013534b6');
+        const element = document.querySelector('#df-9de32980-4b9a-4c56-b91d-a95fe1117ddd');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1668,8 +1553,8 @@ document.write(`
   </div>
 
 
-<div id="df-5b29ff50-8e3f-4ab0-89ee-1f607f527198">
-  <button class="colab-df-quickchart" onclick="quickchart('df-5b29ff50-8e3f-4ab0-89ee-1f607f527198')"
+<div id="df-bda95a00-a961-43b3-bfc3-da02e98aa22c">
+  <button class="colab-df-quickchart" onclick="quickchart('df-bda95a00-a961-43b3-bfc3-da02e98aa22c')"
             title="Suggest charts"
             style="display:none;">
 
@@ -1788,7 +1673,7 @@ document.write(`
     }
     (() => {
       let quickchartButtonEl =
-        document.querySelector('#df-5b29ff50-8e3f-4ab0-89ee-1f607f527198 button');
+        document.querySelector('#df-bda95a00-a961-43b3-bfc3-da02e98aa22c button');
       quickchartButtonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
     })();
@@ -1798,7 +1683,7 @@ document.write(`
   </div>
 </div></div>
 </div>
-<p>Pembentukan Graph : Setiap kata yang memiliki hubungan dengan kata lain dan nilai Term frequency lebih dari 5 akan dibentuk node yang saling terhubung</p>
+<p>Pembentukan Graph : Setiap kata yang memiliki hubungan dengan kata lain dan nilai Term frequency lebih dari 16 akan dibentuk node yang saling terhubung</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="n">nx</span><span class="o">.</span><span class="n">DiGraph</span><span class="p">()</span>
@@ -1835,7 +1720,7 @@ document.write(`
 <section id="contoh-manual-pagerank">
 <h3><strong>Contoh manual Pagerank</strong><a class="headerlink" href="#contoh-manual-pagerank" title="Permalink to this heading">#</a></h3>
 <p><a class="reference external" href="https://docs.google.com/spreadsheets/d/1UxEkKb5cPNq9R_L12mesVVVeWueRxBxd/edit?usp=sharing&amp;amp;ouid=104180635781972900428&amp;amp;rtpof=true&amp;amp;sd=true">https://docs.google.com/spreadsheets/d/1UxEkKb5cPNq9R_L12mesVVVeWueRxBxd/edit?usp=sharing&amp;ouid=104180635781972900428&amp;rtpof=true&amp;sd=true</a></p>
-<p>Berikut adalah gambar graph yang dihasilkan dari hubungan antar kata yang memiliki nilai TF lebih dari 5</p>
+<p>Berikut adalah gambar graph yang dihasilkan dari hubungan antar kata yang memiliki nilai TF lebih dari 16</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Menampilkan graf</span>
@@ -1849,7 +1734,7 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/90e2129d658626f8ee03e2a992351cf3cf15bebfeea4811e70f23ec65c666066.png" src="_images/90e2129d658626f8ee03e2a992351cf3cf15bebfeea4811e70f23ec65c666066.png" />
+<img alt="_images/9783a049ae9387dec5e46ac9a16f3bc00203df3da6e08b4f72dea6e68b7cb8d5.png" src="_images/9783a049ae9387dec5e46ac9a16f3bc00203df3da6e08b4f72dea6e68b7cb8d5.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1913,6 +1798,15 @@ document.write(`
         <p class="prev-next-subtitle">previous</p>
         <p class="prev-next-title">Closeness Centrality beritajatim</p>
       </div>
+    </a>
+    <a class="right-next"
+       href="UAS_PPW.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">UAS PPW LDA berita</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>

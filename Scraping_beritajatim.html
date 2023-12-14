@@ -176,6 +176,7 @@ const thebe_selector_output = ".output, .cell_output"
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Scraping beritajatim.com</a></li>
 <li class="toctree-l1"><a class="reference internal" href="closeness_centrality_beritajatim.html">Closeness Centrality beritajatim</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ekstraksi_kata_kunci.html">Ekstraksi Kata Kunci</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UAS_PPW.html">UAS PPW LDA berita</a></li>
 </ul>
 
     </div>
@@ -445,33 +446,45 @@ Setelah mengumpulkan judul, konten, dan kategori dari setiap artikel, informasi 
 Akhirnya, fungsi mengembalikan list data yang berisi informasi yang telah berhasil di-scrape dari halaman-halaman berita.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">scrap_beritajatim</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">hal</span><span class="p">,</span> <span class="n">kategori</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_content</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">scrape_beritajatim</span><span class="p">(</span><span class="n">link</span><span class="p">,</span> <span class="n">hal</span><span class="p">,</span> <span class="n">kategori</span><span class="p">):</span>
     <span class="n">category</span> <span class="o">=</span> <span class="n">kategori</span>
     <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">base_url</span> <span class="o">=</span> <span class="n">link</span>
-    <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">hal</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s1">page/</span><span class="si">{</span><span class="n">page</span><span class="si">}</span><span class="s1">/&#39;</span>
-        <span class="c1"># print(f&quot;Scraping page: {url}&quot;)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-            <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
-            <span class="n">blok</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s1">&#39;widget berita-list&#39;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">hal</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">base_url</span><span class="si">}</span><span class="s1">page/</span><span class="si">{</span><span class="n">page</span><span class="si">}</span><span class="s1">/&#39;</span>
+            <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fetch_content</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">url</span><span class="p">))</span>
+
+        <span class="n">pages_content</span> <span class="o">=</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="o">*</span><span class="n">tasks</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">page_content</span> <span class="ow">in</span> <span class="n">pages_content</span><span class="p">:</span>
+            <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">page_content</span><span class="p">,</span> <span class="s1">&#39;html.parser&#39;</span><span class="p">)</span>
+            <span class="n">blok</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;main&#39;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s1">&#39;site-main&#39;</span><span class="p">)</span>
             <span class="n">articles</span> <span class="o">=</span> <span class="n">blok</span><span class="o">.</span><span class="n">find_all</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s1">&#39;berita&#39;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">article</span> <span class="ow">in</span> <span class="n">articles</span><span class="p">:</span>
                 <span class="n">link</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span>
-                <span class="c1"># print(f&quot;link: {link}&quot;)</span>
                 <span class="n">title</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;h3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-                <span class="c1"># print(f&quot;Judul: {title}</span>
-            <span class="n">content_response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">link</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">content_response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-                <span class="n">content_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">content_response</span><span class="o">.</span><span class="n">content</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
-                <span class="n">article_content</span> <span class="o">=</span> <span class="n">content_soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s1">&#39;entry-content&#39;</span><span class="p">)</span>
-                <span class="k">if</span> <span class="n">article_content</span><span class="p">:</span>
-                    <span class="n">content_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-                    <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="n">article_content</span><span class="o">.</span><span class="n">find_all</span><span class="p">([</span><span class="s1">&#39;p&#39;</span><span class="p">,</span> <span class="s1">&#39;h2&#39;</span><span class="p">,</span> <span class="s1">&#39;h3&#39;</span><span class="p">,</span> <span class="s1">&#39;h4&#39;</span><span class="p">,</span> <span class="s1">&#39;h5&#39;</span><span class="p">]):</span>
-                        <span class="n">content_text</span> <span class="o">+=</span> <span class="n">paragraph</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;ADVERTISEMENT&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;SCROLL TO RESUME CONTENT&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
-                    <span class="c1"># print(content_text)</span>
-                    <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span><span class="n">content_text</span><span class="p">,</span><span class="n">category</span><span class="p">])</span>
+                <span class="n">content_response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fetch_content</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">content_response</span><span class="p">:</span>
+                    <span class="n">content_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">content_response</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span>
+                    <span class="n">_class_content</span> <span class="o">=</span> <span class="n">content_soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">,</span> <span class="n">class_</span><span class="o">=</span><span class="s1">&#39;entry-content&#39;</span><span class="p">)</span>
+                    <span class="n">tanggal</span> <span class="o">=</span> <span class="n">content_soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>  <span class="c1"># Mengambil elemen tanggal</span>
+                    <span class="k">if</span> <span class="n">_class_content</span> <span class="ow">and</span> <span class="n">tanggal</span><span class="p">:</span>
+                        <span class="n">content_text</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+                        <span class="k">for</span> <span class="n">paragraph</span> <span class="ow">in</span> <span class="n">_class_content</span><span class="o">.</span><span class="n">find_all</span><span class="p">([</span><span class="s1">&#39;p&#39;</span><span class="p">]):</span>
+                            <span class="n">content_text</span> <span class="o">+=</span> <span class="n">paragraph</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;ADVERTISEMENT&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;SCROLL TO RESUME CONTENT&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+                        <span class="n">tanggal_publish</span> <span class="o">=</span> <span class="n">tanggal</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># Mendapatkan tanggal publikasi</span>
+                        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">title</span><span class="p">,</span> <span class="n">content_text</span><span class="p">,</span> <span class="n">tanggal_publish</span><span class="p">,</span> <span class="n">category</span><span class="p">])</span>
+
     <span class="k">return</span> <span class="n">data</span>
 </pre></div>
 </div>
@@ -483,30 +496,868 @@ Data hasil penggabungan kemudian dilakukan random agar datanya tidak tersusun ur
 Kemudian data disimpan.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pendidikan</span> <span class="o">=</span> <span class="n">scrap_beritajatim</span><span class="p">(</span><span class="s1">&#39;https://beritajatim.com/kanal/pendidikan-kesehatan/&#39;</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="s1">&#39;Pendidikan&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pendidikan</span> <span class="o">=</span> <span class="k">await</span> <span class="n">scrape_beritajatim</span><span class="p">(</span><span class="s1">&#39;https://beritajatim.com/kanal/pendidikan-kesehatan/&#39;</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="s1">&#39;Pendidikan&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dubes Inggris Bakal Kunjungi KEK Singhasari Malang
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mycoplasma Pneumonia: Penyakit Baru di Indonesia
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>5 PTN di Indonesia dengan Kelas Internasional
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PPK Ormawa HMPBK Unesa Boyong Tiga Penghargaan Abdidaya Ormawa
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Rektor Unitomo Ajak Mahasiswanya Tak Apatis pada Politik
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>PWI Gresik dan SMA Sunan Giri Gelar Pelatihan Jurnalistik
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dialog Gusdurian di Untag Surabaya Ajak Perluas Demokrasi
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Seleksi Masuk PTN 2023, Begini Tanggapan UB dan Polinema
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Polinema Kukuhkan 5 Guru Besar Berbagai Bidang Ilmu
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Usaha Yankes Terbaik, Ponorogo Buka Labkesda Tambakbayan
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024 Mendatang, Universitas Ma Chung Kukuhkan Dua Profesor Baru Bidang TI dan Sastra Inggris
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Gelar 2nd EBESSIC, FEB Unisma Datangkan Peneliti dan Praktisi dari 13 Negara
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Pusdikbud UGM Launching Permainan Edukasi Truwelu
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Kasus DBD Tidak Tinggi, Alasan Nyamuk Wolbachia Tidak Diterapkan di Surabaya
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Kejari Tuban Ajak Pelajar SMA Melek Bahaya Korupsi
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>4 Kali Juara Umum MTMQ-MN, UM Optimis Terus Unggul di 2025
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>FEB Unisma Bahas Ekonomi Bareng Peneliti dari 13 Negara
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Periksa Kesehatan Pakai PeriksaDulu.com Bisa Gunakan BPJS
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fikom Universitas Ciputra Surabaya Gandeng YKBS Tangani Sampah
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Unitomo Berangkatkan Mahasiswa KKN Tematik ke Tulangan Sidoarjo
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Waspada Infeksi Bakteri Mycoplasma Pneumoniae pada Anak, Begini Gejala dan Pencegahannya
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Virus Covid-19 Masih Berkembang, Dinkes Surabaya Ingatkan Masyarakat
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dinas Perpustakaan dan Arsip Jember Kumpulkan Pegiat Literasi
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Dukung Jambore Kader Posyandu, Aqua Banyuwangi Kembangkan Integrasi Wash-Gizi Di Singojuruh
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Generasi Milenial Dominasi DPT Pemilu 2024 di Jatim
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>KPU Jatim Dorong Mahasiswa Malang Gunakan Hak Pilih
+</pre></div>
+</div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">CancelledError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="nn">&lt;ipython-input-3-bf57aea411eb&gt;</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">pendidikan</span> <span class="o">=</span> <span class="k">await</span> <span class="n">scrape_beritajatim</span><span class="p">(</span><span class="s1">&#39;https://beritajatim.com/kanal/pendidikan-kesehatan/&#39;</span><span class="p">,</span><span class="mi">40</span><span class="p">,</span><span class="s1">&#39;Pendidikan&#39;</span><span class="p">)</span>
+
+<span class="nn">&lt;ipython-input-2-ea64dc8b7fbe&gt;</span> in <span class="ni">scrape_beritajatim</span><span class="nt">(link, hal, kategori)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span>                 <span class="n">link</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">)[</span><span class="s1">&#39;href&#39;</span><span class="p">]</span>
+<span class="g g-Whitespace">     </span><span class="mi">26</span>                 <span class="n">title</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;h3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="ne">---&gt; </span><span class="mi">27</span>                 <span class="n">content_response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">fetch_content</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">link</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>                 <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span>                 <span class="k">if</span> <span class="n">content_response</span><span class="p">:</span>
+
+<span class="nn">&lt;ipython-input-2-ea64dc8b7fbe&gt;</span> in <span class="ni">fetch_content</span><span class="nt">(session, url)</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> 
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_content</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+<span class="ne">----&gt; </span><span class="mi">6</span>     <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> 
+
+<span class="nn">/usr/local/lib/python3.10/dist-packages/aiohttp/client.py</span> in <span class="ni">__aenter__</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1185</span> 
+<span class="g g-Whitespace">   </span><span class="mi">1186</span>     <span class="k">async</span> <span class="k">def</span> <span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_RetType</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1187</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_resp</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coro</span>
+<span class="g g-Whitespace">   </span><span class="mi">1188</span>         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resp</span>
+<span class="g g-Whitespace">   </span><span class="mi">1189</span> 
+
+<span class="nn">/usr/local/lib/python3.10/dist-packages/aiohttp/client.py</span> in <span class="ni">_request</span><span class="nt">(self, method, str_or_url, params, data, json, cookies, headers, skip_auto_headers, auth, allow_redirects, max_redirects, compress, chunked, expect100, raise_for_status, read_until_eof, proxy, proxy_auth, timeout, verify_ssl, fingerprint, ssl_context, ssl, server_hostname, proxy_headers, trace_request_ctx, read_bufsize, auto_decompress, max_line_size, max_field_size)</span>
+<span class="g g-Whitespace">    </span><span class="mi">599</span>                             <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">req</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">600</span>                             <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">601</span>                                 <span class="k">await</span> <span class="n">resp</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">602</span>                             <span class="k">except</span> <span class="ne">BaseException</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">603</span>                                 <span class="n">resp</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+<span class="nn">/usr/local/lib/python3.10/dist-packages/aiohttp/client_reqrep.py</span> in <span class="ni">start</span><span class="nt">(self, connection)</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>                 <span class="k">try</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>                     <span class="n">protocol</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_protocol</span>
+<span class="ne">--&gt; </span><span class="mi">965</span>                     <span class="n">message</span><span class="p">,</span> <span class="n">payload</span> <span class="o">=</span> <span class="k">await</span> <span class="n">protocol</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>  <span class="c1"># type: ignore[union-attr]</span>
+<span class="g g-Whitespace">    </span><span class="mi">966</span>                 <span class="k">except</span> <span class="n">http</span><span class="o">.</span><span class="n">HttpProcessingError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>                     <span class="k">raise</span> <span class="n">ClientResponseError</span><span class="p">(</span>
+
+<span class="nn">/usr/local/lib/python3.10/dist-packages/aiohttp/streams.py</span> in <span class="ni">read</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">620</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_waiter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loop</span><span class="o">.</span><span class="n">create_future</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">621</span>             <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">622</span>                 <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_waiter</span>
+<span class="g g-Whitespace">    </span><span class="mi">623</span>             <span class="k">except</span> <span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">,</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">624</span>                 <span class="bp">self</span><span class="o">.</span><span class="n">_waiter</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="ne">CancelledError</span>: 
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sport</span> <span class="o">=</span> <span class="n">scrap_beritajatim</span><span class="p">(</span><span class="s1">&#39;https://beritajatim.com/kanal/olahraga//&#39;</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="s1">&#39;Sport&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sport</span> <span class="o">=</span> <span class="k">await</span> <span class="n">scrape_beritajatim</span><span class="p">(</span><span class="s1">&#39;https://beritajatim.com/kanal/olahraga/&#39;</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="s1">&#39;Sport&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Kurang Persiapan Jadi Alasan Kekalahan Perseba Bangkalan
+Kantongi Poin Penuh Kontra Perseba, Ini ‘PR’ Benahi Pemain Perssu
+Gagal Raih Kemenangan, Karteker Persebaya Enggan Kasih Komentar
+Satu Poin untuk Persis Solo, Awal Kebangkitan Selamatkan Tim di Klasemen
+Leg Kedua, Perssu MC Tundukkan Perseba Bangkalan 2-1
+Kalah 1-0 Atas Persenga Nganjuk, Pelatih PSMP Mojokerto Kecewa
+Gol Cepat Persenga Nganjuk Jadi Petaka Bagi PSMP Mojokerto
+Gol Cepat Qusyairi Lubis Sukses Bawa Persepam Raih 3 Poin dari Persesa
+Babak Pertama, Perssu MC Unggul Tipis 1-0 dari Perseba
+Manajemen Persibo Bojonegoro Kembali Ingatkan Elemen Suporter
+Di Ambang Degradasi, Persebaya Surabaya Harus Tundukkan Persis Solo
+Jamu Persis Solo, Persebaya Surabaya Tanpa Bek
+PSMP Mojokerto Kantongi Izin Tuan Rumah Leg Kedua
+Puncaki Klasemen Sementara Liga 3 Grup M, Ini Persiapan Perssu MC Hadapi Putaran Kedua
+Persepam Berambisi Kembali Kalahkan Persesa Sampang
+Gresik United Fokus Benahi Tim Jelang Pertandingan Terakhir Grup 3
+Dokter Persik Kediri Beber Cedera Hamra Hehanusa
+Terungkap di Balik Kemenangan Arema FC, Karena Kehadiran Sosok Ini
+Cari Bibit Baru Karate, INKAI Surabaya Jalin Kerja Sama dengan SMATAG
+Jelang PON XXI Aceh, KONI Jatim Luncurkan Program Anyar Puslatda
+ISSI Jatim Juara Umum Kejurnas Track 2023
+Tim Basket Putri Ubaya Juara Umum Liga Mahasiswa
+Gulung Persebo Muda, Persewangi Banyuwangi Sukses Koleksi 6 Poin
+Filippo Inzaghi Garang Jadi Pemain, Melempem Jadi Pelatih di Serie A
+Persibo Jadi Tuan Rumah Putaran II Grup N Liga 3 PSSI Jatim
+110 Pemanah Tradisional Jalani Training Pelatih KORMI Jatim
+Pelatih Persibo Bojonegoro Persiapkan Physical Maintenance Pemain
+Liga 1 Gunakan Wasit Asing, Peringatan untuk Wasit Lokal?
+Ini Kunci Sukses Madura United Kalahkan Barito Putera di SGB
+Pelatih Persib Akui Kekalahan dari Persik
+Warga Citra Harmoni Sidoarjo Gelar Lomba Domino Bertema Pemilu Damai
+3 Tim Jatim Raih Kemenangan di Pekan ke-22 Liga 1
+Kejuaraan Futsal Pelajar PAC IPNU-IPPNU Mantup Lamongan, Tim SMAN Kedungpring Raih Juara
+Persebaya Dua Kali Tanding pada Pekan ke-23 Liga 1
+Jumpa Persebaya, Persis Belum Tentu Dipimpin Leonardo Medina
+Luar Biasa, Persik Akhiri Rekor Tak Terkalahkan Persib
+Usai Cetak Gol Buat Arema FC, Gilbert Alvarez Puji Pemain
+Usai Menang Lawan Persis, Valente Ingatkan Pemain Arema Tidak Boleh Lengah
+Gresik United Kalah 0-2 dari Persijap
+NZR Sumbersari Vs Persewangi Banyuwangi Hujan Gol
+Diwarnai Kartu merah, Madura United Kalahkan Barito Putera 4-1 di SGB
+Madura United Turunkan 6 Pemain Asing Hadapi Barito Putera
+Persema Malang Juru Kunci Putaran I Liga 3 di Jember
+Pasuruan United Bekuk Persema Malang 2-1 di Jember
+Membanggakan Banyuwangi, Atlet Peraih Medali Emas di Portugal dapat Beasiswa
+Persepam Tempati Posisi 2 Klasemen Sementara Grup 10 Liga 3
+Ini Kata Pelatih Persepam Usai Dikalahkan Perssu Madura City
+Kresna Unesa Pertanyakan Penalti untuk Persid Jember
+Persid Jember Sempurna Hingga Akhir Putaran I Liga 3
+Permintaan Terakhir Lulinha untuk Madura United
+Francisco Rivera Nilai Lawan Barito sebagai Laga Penting Bagi Madura United
+Unai Emery Penjinak Matador di Inggris
+Menang 2-1 Atas Asyabab Bangil, PSMP Puncaki Klasemen Sementara
+Lawan Barito Putera, Madura United Berambisi Akhiri Rentetan Hasil Minor
+Raih Poin Penuh, Perssu Madura City Tundukkan Persepam 1-0
+Persebaya Imbang Kontra Persija, Uston: Maaf, Kita Belum Beruntung
+Gresik United Bertekad Curi Poin di Kandang Persijap
+Bonek Kembali Serukan ‘Yahya Out!’, Manajer Persebaya Pasrah
+Pelatih Persibo Terkejut Permainan Garang Persatu
+PSMP Mojokerto Sapu Bersih Tiga Laga Penyisihan Grup E Liga 3 Jatim
+Persatu Kalah 3-1 di Kandang Persibo Meski Tampil Garang
+Thomas Doll Kecewa Hasil Imbang di Kandang Persebaya
+Targetkan Kemenangan, Arema FC Siapkan Kejutan di Laga Melawan Persis
+Jakmania dan Bonek Bertemu, Uston Tegaskan Mereka Sudah Dewasa
+Diposisikan Bek Kanan oleh Pelatih, Kasim Botan Akui Butuh Adaptasi
+Persepam Akan Hadapi Laga Berat Lawan Perssu Madura City
+Dinpora Bojonegoro Janji Cairkan Bonus Atlet dan Pelatih Porprov Jatim VIII/2023 Bulan ini
+Komposisi Legiun Asing Madura United Komplit
+PSBI Blitar Kena Denda Rp25 Juta dan Larangan Penonton
+Madura United Lepas Lulinha
+Mundur dari Liga 3, PSSI Jatim Jatuhkan Sanksi dan Denda ke Arek Suroboyo
+Unesa Kembangkan Pickleball, Olahraga Asal Amerika Serikat
+Persebaya Siap Hadapi El Clasico Melawan Persija
+Bangkit, Kresna Unesa Kalahkan Persema 1-0 di Jember
+Kenakan Jersey Persepam adalah Kebanggaan
+Persepam Sukses Kalahkan Perseba Bangkalan 1-2
+Akhir Pertandingan Kresna Unesa vs Persema Malang di Jember Sempat Ricuh
+Dikalahkan Persid Jember, Pasuruan United Kecewa Performa Wasit
+Gol Tunggal Vaiz Bawa Persid Jember Puncaki Klasemen Liga 3 Grup H Jatim
+Pengakuan Aldhea Azarina Bharata Usai Menjuarai Karate di Portugal
+Ditekuk Perssu, Pelatih Persesa Sampang Sebut Timnya Kalah Mental
+Atlet Banyuwangi Juara Karate di Portugal Pulang Diarak
+Panen Gol atas Persesa Sampang, Ini Taktik Pelatih Perssu MC
+Jelang Liga 2, Stadion Tuban Sport Centre Dinilai Layak
+PSMP Mojokerto Tekuk Simo Putra Pamekasan 3-1
+Persibo Bojonegoro Raih 6 Poin di Putaran Pertama Grup N PSSI Jatim
+Laga Kedua di Stadion Sumenep, Perssu MC ‘Cukur’ Persesa Sampang 6-1
+Babak Pertama, Perssu Sumenep Tundukkan Persesa Sampang 3-1
+Pelatih Persik Kediri Coba Duetkan Bayu Otto dan Ze Valente
+Lawan Simo Putra, PSMP Target Kembali Raih Poin
+Persepam Kembali Incar Poin Saat Melawan Perseba Bangkalan
+Grup H Liga 3: Persid Jember vs Pasuruan United, Kresna Unesa vs Persema
+Persis Asah Penyelesaian Akhir Jelang Lawan Arema FC
+Pekan ke-22 Liga 1 Diwarnai Big Match Persebaya vs Persija
+Persija Tanpa Gustavo Almeida saat Melawan Persebaya
+Justin Hubner Resmi WNI dan Siap Bela Timnas Indonesia
+Gresik United Ditahan 0-0 Persela
+Bertanding di Blitar, Gresik United Vs Persela Lamongan Imbang 0-0 di Babak Pertama
+Manajemen Madura United Tunjuk Richard Erlangga sebagai Pelaksana Presiden Klub
+PSBI Blitar Yakin Kalahkan Perseta Tulungagung
+Laga Rawan Ricuh, PSBI Blitar Vs Perseta Tulungagung Dijaga Ketat Polisi
+Madura United Plot Dalberto sebagai Suksesor Junior Brandão
+Lebih Mewah, Persebaya Gunakan LED Board di GBT
+Persebaya Waspadai Permainan Cepat Persija
+Persebaya Akhiri Nomaden Home, Jamu Persija di GBT
+Lawan Persija, Oktavianus Fernando Ingin Ulang Gol Manis
+Kebobolan Gol Cepat Lawan Pasuruan, Mental Kresna Unesa Sempat Drop
+Pasuruan United Tundukkan Kresna Unesa 2-0 di Jember
+Persibo Bojonegoro Raih Poin Penuh Lawan Inter Pemuda Kediri
+Menang Tipis Atas Perseba, Ini yang Akan Dibenahi Pelatih Perssu MC
+Kalah dari Perssu MC, Perseba Akui Hanya Punya Satu ‘Striker’
+54 Klub Bersaing di Kompetisi Liga 3 Jawa Timur
+Datang ke Stadion JSG Mepet Kick-Off, Persema Jadi Bulan-Bulanan Persid Jember
+Jadi Tuan Rumah, Persekabpas Berhasil Unggul 4-0 dari Mitra Surabaya
+Pelatih Ungkap Dua Faktor Kekalahan Persema dari Persid Jember
+Gulung Persema 3-0, Persid Jember Pimpin Grup H Liga 3 Jatim
+Lolos 12 Besar, Persela Lamongan Tetap Ngotot Menang Lawan Gresik United
+Ini Kata Pelatih Persepam Usai Kalahkan Persesa Sampang
+Gol Semata Wayang, PSMP Raih Poin Penuh Atas Persenga Nganjuk
+Duel Derbi Pantura Jatim Gresik United Vs Persela Ditunggu
+PSM Madiun Tekuk Arema Indonesia 2-1
+Perssu MC Menang Tipis 1-0 Atas Perseba Bangkalan
+PSMP Mojokerto Menang Tipis atas Persenga Nganjuk
+KORMI Jatim Gelar Lomba Panahan dan Sumpitan
+Main Apron Lanud Iswahjudi Siap Jadi Trek Air Force Run 2023
+Laga Perdana Liga 3, Persepam Kalahkan Persesa Sampang 2-0
+Tak Dapat Anggaran, KONI Blitar Terancam Dibubarkan
+Babak Pertama, Perssu MC Unggul 1-0 atas Perseba Bangkalan
+Pengurus KONI Kabupaten Blitar Terpaksa Gadaikan Harta
+Menit Awal, Persibo Bojonegoro Unggul 2 Gol Atas Inter Pemuda Kediri
+Skuad Perssu On Fire di Laga Perdana Liga 3 Jatim 2023
+Atlet Banyuwangi Borong Dua Emas Kejuaraan Karate Dunia di Portugal
+Elemen Persibo Bojonegoro Berkumpul, Ada apa?
+Terbebani Posisi Tuan Rumah, Persid Jember Tak Mau Remehkan Lawan
+PSSI Kota Kediri Gelar Kursus Pelatih Lisensi D Nasional
+Telat Datang, Persema Tak Jajal Lapangan Jember Sport Garden
+Laga Perdana, PSMP Mojokerto Target Amankan Poin di Kandang
+Laga Perdana Persibo Bojonegoro Lawan Inter Pemuda Kediri
+Pajajaran Bogor Raih Gelar Juara Liga Esport Nasional 2023
+Pasuruan United Targetkan Lolos dari Grup H Liga 3 di Jember
+Puji Jember Sport Garden, Kresna Unesa Siap Beri Kejutan
+Jadwal Grup H Liga 3 Jatim: Persid Jember, Persema, Pasuruan United, Kresna Unesa
+Gresik United Jamu Persela di Stadion Supriyadi Kota Blitar
+Persepam Diminta Selalu Junjung Tinggi Sportivitas
+Ini Skuad dan Nomor Jersey Persepam Musim 2023-2024
+Persepam Launching Tim dan Jersey Hadapi Liga 3 2023
+Cerita Persibo Tunjuk Iwan Setiawan di H-2 Kickoff Liga 3
+Stadion Gajah Mada Mojokerto Hanya Untuk 3 Pertandingan Awal
+Keren!! Turnamen Sepakbola Benteng Manunggal Cup 2023 Dilengkapi VAR
+Adnan Mahing Dicopot dari Pelatih Kepala Persibo
+Uston Nawawi Bakal Tak Dampingi Persebaya lawan Persija
+Cedera, Bek Persebaya Dusan Stevanovic Absen 1 Bulan
+PSSI Jatim Larang Politik Tunggangi Kompetisi Liga 3
+Liga 3 Kapal Api Jatim Live Streaming, Suporter Dilarang
+Bali United Siap Kalahkan Arema FC Sore ini
+Arungi Liga 3 Jatim, PSBI Blitar Kenalkan Skuad Pemain
+Eks Striker Arema Absen Bela Persija di Tiga Pertandingan
+BNI Bright Up Cup 2023 Hadirkan Atlet Legendaris Indonesia
+Gresik United Ulang Tahun ke-18, Fokus Bidik Liga 1
+Arema FC Janji Tampil Agresif saat Lawan Bali United
+Unesa FC Debut di Liga 3, Pemain Mayoritas Mahasiswa
+Mes Atlet Bulutangkis Resmi Dipakai Atlet Pelatprov
+Turnamen Icha Cup 2023: Tenis Lapangan, Ajang Persahabatan
+Siap Kembalikan Masa Kejayaan Perssu ke Liga 2
+Erick Thohir Sebut Piala Dunia U-17 2023 Bawa Banyak Pelajaran
+Marc Marquez Siap Hadapi MotoGP 2024 Usai Jalani Operasi Arm Pump
+Madura United Datangkan Pemain Muda Persik Kediri, Abiyoso
+Jerman Juara Piala Dunia U17 di Indonesia
+PB Tjakrindo Bayu Kencana Juara Umum Bulutangkis Piala Gubernur Jatim
+FIFA Puji Penyelenggaraan Piala Dunia U17 di Indonesia
+KORMI Jatim Latih Guru TK Olahraga Anak Usia Dini
+Persik Kediri Pinjamkan Abiyoso Ke Madura United
+Playoff Liga Esports Nasional 2023 Siap Digelar Ini , Berikut Tim yang Akan Tanding
+Jerman Siap Ukir Sejarah di Piala Dunia U-17 2023
+Tahan Imbang Rans Nusantara, Pelatih Persebaya Sebut Beruntung Dapat Poin Setelah Paceklik Kemenangan
+Gresik United Tundukkan Tuan Rumah Persipa 1-0
+Laga Persis Vs Madura United Ditunda, Ini Kata Manajer Laskar Sape Kerrab
+Perssu MC Matangkan ‘Tactical Individual’ Agar Pemain Tak Mudah Panik
+Pelatih Persebaya Klaim Pemain Lebih Kompak Jelang Lawan Rans Nusantara
+Bursa Transfer Persebaya Paruh Musim 2023/2024 Lengkap
+Uji Coba Lawan Mitra FC Sumenep, Perssu MC Panen Gol 8-1
+Baru Gabung, Eks Striker Arema Alami Cedera di Persija
+Wali Kota Mojokerto Serahkan Reward Rp 1,3 Miliar untuk Atlet dan Pelatih
+RANS Mengaku Buta Kekuatan Persebaya Surabaya
+Da Silva Tegaskan Jerman Selalu Lapar Gelar
+Final Piala Dunia U-17 2023, Pemkot Solo Rekayasa Lalin
+Indomaret vs BIN Pasundan Buka Final Four Livoli di Kediri
+Deltras Pulang Tanpa Poin dari Kandang Persela
+Persam Berhasil Bawa Pulang Trofi Menpora
+Persela Lamongan Tekuk Deltras FC, Rosalvo Gagal Penalti
+PSSI Sambut Hangat Radja Nainggolan di Liga 1
+Argentina Fokus Kalahkan Mali untuk Raih Posisi Tiga
+Mali Berharap Dukungan Suporter Indonesia di Laga Lawan Argentina
+Pekan Ke-20 Liga 1, Madura United Naik ke Posisi 5 Klasemen
+Closing Ceremony Piala Dunia U-17 Dikemas Sederhana
+Tim Pemain Keturunan Indonesia Raih Hasil Imbang
+Pemain Keturunan Indonesia Starter di Liga Champion Eropa
+Deltras FC Optimistis Raih Poin di Kandang Persela Lamongan
+Prancis Siap Tuntaskan Dendam atas Jerman
+Radja Nainggolan Segera Gabung Bhayangkara FC
+Jadwal Pekan ke-21 Liga 1, Persebaya Jumpa RANS
+Pisah dari Persija, Mantan Bek Persebaya Gabung RANS
+Tinggalkan Persebaya, Sho Yamamoto Gabung Persis
+Manahan Bersolek Jelang Final Piala Dunia U-17 2023
+Song Ui-Young dan Ernando Ari Dipastikan akan Diturunkan Hadapi Rans Nusantara
+Usai Piala Dunia U-17, Jatim Bangun Sport Center di Malang
+Cetak 6 Ribu Tiket Laga Persik Kediri vs Dewa United, Ini Alasan Panpel
+Pertamina Jadi Sponsor Baru Arema FC, Kasih Suntikan Dana
+Oktavianus Fernando Berharap Persebaya Makin Solid
+Pertamina Jadi Sponsor Baru Arema FC
+Lepas Atlet Tim Basket ke Kalimantan, Jatim Targetkan Juara
+Orang Muda Ganjar Bareng Fun Game Sport Gelar Turnamen Fourfeo Futsal
+Dukungan Timnas U17 Jangan Hanya di Piala Dunia
+Ketua Kormi Jatim Lantik 41 Pengurus Tuban, Ini Targetnya
+Hasil Lengkap Pekan ke-20 Liga 1 Musim 2023/2024
+Berbekal Sebagai Jurnalis Lokal Hingga Jajaki Media Operation Piala Dunia U17
+Persebaya Akan Terapkan Regulasi Piala Dunia U17 di Laga Home
+Jelang Liga 3, Perssu MC Fokus Latihan Taktik dan Strategi
+Ze Valente Bikin Assist, Persik Kediri Permalukan Arema FC
+Madura United Datangkan Kiper Asal Brasil, Lucas Frigeri
+Pabersi Jatim Siap Jawab Tantangan KONI di PON Aceh dengan Medali
+Argentina Fokus Kalahkan Jerman untuk Membayar Penasaran
+Prancis Ingin Pertahankan Rekor Clean Sheet di Semifinal Piala Dunia U-17
+Jerman Hanya Butuh Dua Kemenangan untuk Menciptakan Sejarah
+Mali Siap Lawan Prancis di Semifinal Piala Dunia U-17
+Semifinal Piala Dunia U-17 Digelar di Manahan Besok Sore
+Usai Mentas di Pildun U-17, Riski Afrizal Berbagi Ilmu dengan Anak-anak Pelosok Blitar
+Perdana, 320 Peserta Bersaing di Bupati Cup E-Sport Magetan
+Junior Brandão Susul Rendika Rama Tinggalkan Madura United
+Bonek Asal Belanda Sedih Gagal Saksikan Persebaya VS PSIS
+Ketua PSSI Jatim Ingin Gencarkan Event Sepak Bola Internasional di Surabaya
+Jadi Kandang Persibo Bojonegoro, Dinpora Pastikan Fasilitas Stadion Lengkap
+Ketua PSSI Jatim Beri Apresiasi Pelaksanaan Piala Dunia U17 di Surabaya
+Piala Dunia U17 Diharapkan Jadi Inspirasi Pelatih SSB Kembangkan Sepak Bola Usia Dini
+1000 Atlet Bulutangkis Siap Bersaing di Piala Gubernur Jatim 2023
+Cak Hud: Jaga Imun dengan Berolahraga Walau 10 Menit
+Laga Uji Coba, Perssu MC Taklukkan Mitra Surabaya 2-0
+Dua Penggawa Argentina Bersaing Meraih Sepatu Emas
+Surakarta Gencarkan Promosi Wisata Menuju Final Piala Dunia U-17
+Maroko Berambisi Besar Lolos ke Semifinal Piala Dunia U-17
+Prancis Percaya Diri Kalahkan Uzbekistan dan Lolos Semifinal
+Madura United Pinjamkan Andik Rendika Rama ke Klub Liga 1
+Jerman Yakin Juara Piala Dunia U-17 2023 di Indonesia
+Hadapi Arema FC, Persik Kediri dapat Tambahan 3 Amunisi Baru
+Karateka Banyuwangi Wakili Indonesia di Kejuaraan Dunia
+Persibo Bojonegoro Siap Disanksi Jika Terjadi Keributan saat Pertandingan
+Bos PSIS Sayangkan Penundaan Laga Lawan Persebaya
+Jerman Hadapi Argentina di Semifinal Piala Dunia U-17 2023
+Persebaya Surabaya Batal Jamu PSIS Semarang, Ini Alasanya
+Piala Dunia U-17 Sukses Digelar, Tapi UMKM Menjerit Tak Capai Target Penjualan
+Pengurus KORMI Tuban Dilantik, Ini Pesan Bupati
+Madura United Akui Kekalahan dari Bali United
+Panpel Persibo Bojonegoro Tunggu Verifikasi Asprov PSSI Jatim
+Panpel Persibo Bojonegoro Upayakan Kelayakan Stadion
+Cerita Tim Psikolog Pulihkan Mental Timnas U-17
+Psikolog Timnas U-17: Kritikan Pedas Bikin Mental Drop
+Bali United Membuat Madura United Makin Menderita
+Sempat Nganggur, Eks Persebaya Gabung Bhayangkara FC
+Indonesia Gabung Grup Berat di Piala AFC U-23 2024
+Penonton Piala Dunia U-17 2023 Lampaui Target FIFA
+Berikut Jadwal Perempat Final Piala Dunia U-17 2023
+Eks Pemain Muda PSM Lengkapi Skuad Perssu Madura City
+Sewa Venue Olahraga di Jember Repotkan Pengurus Cabor
+Pasca Insiden, Ini yang Dilakukan Manajemen Gresik United
+Polda Jatim ‘Risk Assessment’ Stadion Letjend H Soedirman Bojonegoro
+Wali Kota Surabaya Sebut Piala Dunia U-17 Gerakkan UMKM
+Pemkot Surabaya Siap Dievaluasi Soal Piala Dunia U-17
+Lagi, Madura United Gagal Amankan Poin di SGB
+Suporter Ricuh, PSSI Jatim Ancam Diskualifikasi Klub Liga 3
+Laga Gresik United Melawan Persela Resmi Ditunda, Berikut Jadwal Tanding Baru
+Laga Berat Madura United Hadapi Bali United di SGB
+Gelora Penataran Blitar Venue Pertandingan Liga 3 Jatim
+Persid Jember Gagal di Piala Suratin, Strikernya Sempat Pingsan
+Ini Susunan Pemain Timnas Indonesia Kontra Filipina di Manila
+Ricuh Suporter di Stadion Gejos Gresik, Polisi Tetapkan 8 Tersangka
+Dapatkan Ze Valente, Ini Tanggapan Pelatih Persik Kediri
+Persebaya: Piala Dunia U-17 Wajib Jadi Ajang Belajar
+Timnas Indonesia Senior Siap Curi Kemenangan di Filipina
+Persebaya Desak Pemkot Surabaya Bolehkan GBT untuk Jamu PSIS
+Persebaya Terancam Gagal Gunakan Gejos Saat Menjamu PSIS Semarang
+Jelang Babak Ke 16, Mexico Intip Kekuatan Mali
+Presidium Nasional Suporter Sepak Bola Indonesia: Kejadian di Gresik Jangan Terulang Lagi
+Usai Lepas Gunawan, Persik Kediri Datangkan Irfan Bachdim
+Pebalap se-Jawa, Bali, dan NTT Beradu Cepat di Banyuwangi Drag Bike 2023
+Persela Lamongan Masih Butuh Pemain Baru
+Persekat Tegal Takluk 3:1 Lawan Persela Lamongan
+Persela Lamongan Tundukkan Persekat Tegal 3-1 di Kandang
+Pelatih Gresik United Resmi Mengundurkan Diri
+Pelatih Gresik United Rudy Eka Priyambada di Ujung Tanduk
+Manajemen Deltras FC Angkat Bicara Soal Kericuhan
+Alat Belum Tiba, Timnas U17 Iran Gagal Latihan
+Delegasi FIFA Kagum dengan Budaya Surabaya
+Pangdam V/Brawijaya Dapat Gelar Dan-IV Kehormatan
+Persepam Mulai Matangkan Persiapan
+Atikoh Ganjar Pranowo Kembali Finish Full Marathon 42KM
+Jacksen F Tiago: Mereka Tetap Pahlawan Bangsa
+Galaxy Open 2023 Berakhir, Pebiliar Surabaya Belum Bersinar
+Arkhan Kaka Dipersilahkan Berkarir di Luar Negeri Asal di 8 Negara Ini
+Bakat Arkhan Kaka Terlihat Sejak Usia 15 Tahun di Epa Persis Solo
+Dijamu Persela, Persekat Tegal Siap Beri Perlawanan Sampai Detik Akhir
+Ini Strategi Pelatih Deltras FC Saat Dijamu Gresik United
+Jamu Persekat Tegal, Persela Lamongan Siap Amankan 3 Poin
+Jamu Deltras, Gresik United Bawa Misi Balas Dendam
+Serunya Kejuaraan Basket Harjaba Cup 2023
+Satoshi Yui, Guru Besar Kyokushinkai Melatih di Indonesia
+Tersisa Satu Slot untuk Babak 16 Besar Piala Dunia U-17 2023, Indonesia Nunggu Nasib Saja
+Puluhan Mahasiswa Unesa Memilih Jadi Steward di Ajang Piala Dunia U-17, Ini Alasanya
+Babak Grup Piala Dunia U-17 2023 Tuntas Hari Ini
+Timnas Janji Tampil Lebih Baik Melawan Filipina
+Nasib Timnas Indonesia di Piala Dunia U-17 2023, Ditentukan Hari Ini
+Federasi Harus Evaluasi Pasca Keterpurukan Timnas Indonesia di Piala Dunia U17
+Pemain Persibo Bojonegoro Diego Banowo Jadi MVP saat Uji Tanding
+Ratusan Bocah dan Remaja Ikuti Kejurkab Bulutangkis Jember Tanpa APBD
+Arkhan Kaka dan Welber Jardim Paling Menonjol di Timnas U-17
+74 Ribu Penonton Dukung Timnas U-17 di Stadion GBT
+Daftar Tim yang Tembus 16 Besar Piala Dunia U-17 2023
+Nasib Timnas U-17 Tergantung Korea Selatan dan Meksiko
+Timnas Senior dan U-17 Kompak Kalah pada Kamis Malam
+Bima Sakti Minta Maaf, Indonesia Gagal Raih Kemenangan
+Ditumbangkan Maroko 3-1, Peluang Lolos Indonesia Tipis
+Madura United Manfaatkan Libur dengan Berlatih
+Guru SMAN 4 Blitar Berangkat ke GBT Dukung Arkhan Kaka
+Ratusan Anak Ikuti Kejurprov Panjat Tebing di Blitar
+Asprov PSSI Jatim akan Verifikasi Kesiapan Stadion Letjend H Soedirman Bojonegoro
+Sulthan Zaky Siap Tundukkan Maroko di Laga Penentu
+Persik Kediri Rekrut Pemain Baru Asal Tuban
+Alasan Kanada Gandeng Raphael Maitimo Jadi Official
+Persik Kediri Lepas Kartika Adjie ke Persita Tangerang
+Bima Sakti Yakin Indonesia Kalahkan Maroko
+Penangkal Petir Stadion Letjend H Soedirman Bojonegoro Dites
+Timnas Kanada Harus Kerja Keras Amankan Poin Terakhir
+Persibo Siap Jadi Tuan Rumah Grup N Liga 3 PSSI Jatim
+Target Menang, Ji Da-bin Optimistis Indonesia Lolos 16 Besar
+Indonesia Harus Menang Lawan Maroko untuk Peluang Lolos
+Fakhri Husaini Minta Timnas Tak Tergiur Tawaran Luar Negeri
+Persebaya Genjot Performa Pemain, Uston akan Gelar Game Internal
+Fakhri Husaini Imbau Tak Kritik Berlebihan Timnas Indonesia
+Begini Penilaian Khofifah Soal Permainan Timnas U-17
+Fakhri Husaini Kritik Kualitas Permainan Timnas U-17
+Pelatih Anggap Skuad Perssu MC Belum Maksimal
+Petugas Ubah Sistem Kepulangan Suporter Piala Dunia U17 di Surabaya
+Persela Lamongan Libas PSCS Cilacap dengan Skor Meyakinkan 3-0
+Susul Kepergian 5 Pemain, Giliran Evan Dimas Tinggalkan Arema FC
+Lagi, Indonesia Hanya Bisa Tahan Seri Lawan Panama
+Persepam Gabung Grup 10 Liga 3 PSSI Jatim 2023
+Ubaya Berangkatkan 18 Atlet di Pomnas XVIII 2023
+PSMP Mojokerto Jadi Tuan Rumah Grup E Liga 3 Regional Jatim
+Merchandise Piala Dunia U17 Jadi Buruan Warga di Surabaya
+Jadwal Babak Penyisihan Piala Dunia U17 Tayang di TV
+Komposisi Lengkap, Persepam Siap Hadapi Liga 3 Jatim 2023
+Diikuti 54 Klub, Liga 3 Jawa Timur Digelar 5 Desember
+Resmi Dilaunching, Unggul FC Malang Pasang Target 4 Besar
+Lawan Panama, Welber Jardim Ungkap Pesan Dari sang Pelatih
+Jelang Pertandingan Kedua, Timnas Digenjot Motivasi Mental
+Turnamen Biliar ‘Galaxy Open 2023’ Surabaya Resmi Dibuka
+Piala Dunia U-17, Gelandang Maroko Nilai Ekuador Tim yang Bagus
+Timnas Indonesia Bakal Turunkan Amar Rayhan Lawan Panama
+Lawan Persela Lamongan, Pelatih PSCS Cilacap Jadikan Momentum Kebangkitan
+Joao Almeida Puji Pemain Unggul FC Malang
+Arkhan Kaka Ternyata Sudah Gacor Sejak di PSBK Blitar
+2 Pemain Produk Blitar Jadi Kunci Timnas Indonesia di Piala Dunia U-17
+Venezuela Catat Kemenangan Perdana di Ajang Piala Dunia U-17
+Persela Lamongan Bertekad Amankan Poin Penuh di Kandang
+Suporter Persibo Bojonegoro Minta Dilibatkan dalam Kepemilikan Saham
+EIGER Jaring Bakat Muda Atlet Panjat Tebing Mapala se-Jatim
+Indra Sjafri: Indonesia Butuh Dukungan untuk Lolos Grup
+Indonesia Ingin Cetak Sejarah Lewat Piala Dunia U17
+Peringati Hari Kesehatan, KORMI Jatim Gelar Senam Sehat Bareng Ratusan Warga
+Pasukan Jerman Pantang Memandang Remeh Meksiko
+Prancis Siap Tancap Gas di Piala Dunia U-17 2023
+Jerman dan Prancis Memulai Aksinya di Piala Dunia Hari ini
+Madura United Alami Penurunan Performa
+Persibo Bojonegoro Bertemu Persatu, Madiun Putra dan Inter Pemuda
+Kejutan, Brasil dan Argentina Kompak Kalah di Laga Pertama
+Inggris Catat Kemenangan Terbesar di Piala Dunia U-17 2023
+Kalah 0-4, Persid Jember Lolos dari Grup A Piala Suratin
+Dishub Surabaya Akui Kekurangan Shuttle Bus dari GBT
+Bomber Muda Mali Dipuji sebagai Titisan Erling Haaland
+Eks Persebaya Jadi Official Kanada di Piala Dunia U-17 2023
+Inggris, Brasil, dan Argentina Memulai Kiprah di Piala Dunia U-17 2023 Hari Ini
+Bintang Barcelona Unjuk Gigi Bersama La Furia Roja
+Striker Mali Pencetak Hattrick Perdana, Tumbangkan Uzbekistan
+Pekan Ke-19 Liga 1, Madura United Melorot ke Posisi 6 Klasemen
+Koko Ari Araya Lengkapi Derita Madura United dari Kandang Persik Kediri
+Presiden Jokowi Sebut Kerja Keras Pemain Timnas U-I7 Mengejutkan
+BRI Jadi Sponsor Baru Arema FC
+Suporter Ekuador Puji Fasilitas Piala Dunia U17 di Surabaya
+Pakai Sarung dan Kopyah Serta Syal Palestina, Suporter Asal Bangkalan Ini Nekat Dukung Timnas
+Bupati Jember Jadi Pandit, Ini Ulasan Pertandingan Indonesia Vs Ekuador 1-1
+Imbangi Ekuador, Bima Sakti Akan Evaluasi Tim
+Penonton Piala Dunia U17 Keluhkan Mahalnya Harga Makanan
+8 Menit Opening FIFA World Cup U17 Bikin Ribuan Suporter Terpukau
+PSSI Kolaborasi Dengan FIFA Kembangkan Sepak Bola Indonesia
+FIFA Resmi Buka Kantor Perwakilan Asia Tenggara di Jakarta
+Persid U17 Jember Butuh Seri Lawan Persipro untuk Lolos Fase Grup Piala Suratin
+Sukses Pertandingan Piala Dunia U-17 di Surabaya Angkat Kepercayaan Global
+Jakarta Sudah Siap Menggelar Piala Dunia U-17 2023
+Kaledonia Baru Siap Kejutkan Para Raksasa Grup C
+Kanada Siap Beri Kejutan untuk Spanyol di Laga Pertama Piala Dunia U-17 2023
+Spanyol Incar Start Mulus di Piala Dunia U-17 2023
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">politik</span> <span class="o">=</span> <span class="n">scrap_beritajatim</span><span class="p">(</span><span class="s1">&#39;https://beritajatim.com/kanal/politik-pemerintahan/&#39;</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="s1">&#39;Politik&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">politik</span> <span class="o">=</span> <span class="k">await</span> <span class="n">scrape_beritajatim</span><span class="p">(</span><span class="s1">&#39;https://beritajatim.com/kanal/politik-pemerintahan/&#39;</span><span class="p">,</span><span class="mi">30</span><span class="p">,</span><span class="s1">&#39;Politik&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Vaksinasi 89 Persen, Pemkot Blitar Terima Penghargaan Zero Reported Case PMK
+Pemkot Blitar Raih 2 Penghargaan Bergengsi dari Kementerian LHK
+Pemkot Blitar Komitmen Pertahankan Predikat Swasti Saba Wisatara
+Heri Cahyono Resmi Umumkan Niat Maju Pilkada Kota Malang
+Gandeng PT Sampoerna, Pemkot Blitar Gelar Sosialisasi Lowongan Kerja Bagi Warga Miskin
+Prof Henri Subiakto: Cara Ganjar Atasi Konflik di Papua Tepat
+Begini Cara Pemdes Cileng Magetan Tangani Anak Stunting
+Diskominfo Kediri Sosialisasi Perwali Guna Perkuat Peran KIM
+PDIP Jember: Anies Lawan Bagus bagi Ganjar dalam Debat Capres
+PAW DPRD Pamekasan, Afifurrahman Gantikan Mohammad Sahur
+Sebanyak 20 TPS di Kabupaten Blitar Termasuk Rawan Bencana dan Terpencil
+PAN Jember: Anies Lawan Terberat Prabowo Saat Debat Capres
+Bawaslu Bangkalan Tertibkan Ratusan APK Melanggar Aturan
+Gereja Mawar Sharon Bagi Ribuan Paket Sembako, Eri Cahyadi: Surabaya Kota Toleransi
+Presiden Jokowi Bakal Buka Natal Nasional di Surabaya
+Gebyar Undian Lunas PBB, Ini Harapan Pj Wali Kota Kediri
+TPM Ganjar-Mahfud Berharap Menang Total di Sidoarjo
+Pemkot Kediri Gelar Sosial Feskufa Tahun 2023
+Dinkes Surabaya Fasilitasi Pemeriksaan Kesehatan Petugas KPPS
+Pj Wali Kota Malang Tinjau Apel Gelar Pasukan Sambut Jokowi
+PKB Pastikan Rekom untuk Khofifah Maju Pilgub Hanya Soal Waktu
+Presiden Jokowi Bakal Datang, Pj Wali Kota Malang Tinjau Apel Gelar Pasukan
+PDIP Surabaya Kampanyekan KTP SAKTI dari Ganjar-Mahfud
+Pemkot Kediri Operasi Pasar Murah 3 Hari, Ini Jadwalnya
+Musim Penghujan, Pj Bupati Pasuruan Pesan Jaga Saluran Air
+Timnas Amin Jatim: Survei Litbang Kompas Bahan Evaluasi
+Berikan Jawaban Tegas dan Solutif, Ganjar Kuasai Behasa Panggung Debat Capres
+Indonesia Digital 2024, Ning Lia: Saatnya GenZy Beraksi
+Prabowo-Gibran Siapkan Strategi Cermat Gaet Pemilih Galau
+Prabowo Bakal Dirikan Badan Pusat Legislasi Nasional
+Bupati Sidoarjo Siagakan BPBD Antisipasi Bencana Hidrometeorologi
+Apel Bersama Pengamanan Kunker Presiden Jokowi ke Gresik
+21 Desember 2023, Lelang Penerbangan Jemaah Haji Indonesia Tuntas
+Pj Wali Kota Mojokerto: ASN Wajib Netral di Pemilu 2024
+Usai Debat Perdana, Begini Pandangan Pendukung Capres-Cawapres di Jombang
+Upaya Pemenangan Ganjar, PDIP Blitar Nobar Debat Capres di 248 Posko
+Wantimpres Soekarwo Kunker ke Lamongan, Ajak Diskusi Soal Kedelai
+Ganjar Pranowo Tawarkan Internet Gratis dan Kemudahan Akses Kesehatan
+Tampil Humanis di Debat Perdana, TKN Prabowo-Gibran Optimis Raih Suara Swing Voters
+Andi Arief Tolak Tudingan Prabowo Bawa Kembali ke Rezim Orde Baru
+Berantas Korupsi, Ganjar Pranowo Janji Sahkan RUU Perampasan Aset dan Jebloskan Koruptor ke Nusakambangan
+Debat Pilpres Perdana, TKN Fanta: Prabowo Beri Teladan, Politik Tak Harus Saling Menjatuhkan
+TKD Prabowo-Gibran Jatim Sebut Performa Prabowo Mampu Dongkrak Elektabilitas
+Timnas Amin Jatim Makin Pede Usai Debat Capres Perdana
+Kementerian ESDM Beri Sumur Bor untuk Warga Pojok Kediri
+Pemkot Kediri Gelar Creative Talk &amp; Gathering
+Nobar Debat Capres, Tim Pemenangan Tuban Menilai Ganjar Layak Dipilih
+Nobar Debat, Emak-Emak Pendukung Ganjar di Surabaya Juga Apresiasi Capres Lain
+Ketua TPD Jatim: Kedewasaan Pemimpin Terlihat dari Sosok Ganjar Pranowo
+Aliansi Relawan Jatim Diskusi dan Nobar Debat Capres
+AHY dan Emil Totalitas Dukung Ali Affandi Jadi Anggota DPR RI
+Debat Capres Pertama, Sekretaris TPD Jatim: Performa Ganjar Sat-Set!
+Dosen Unej: Anies Lebih Merdeka, Ganjar Konseptual, Prabowo Bela Jokowi
+Debat Capres: Ganjar Tegaskan Jaga Demokrasi dan Sikat Korupsi
+Nobar Debat Capres, PDIP Surabaya: Ganjar Tampil Sat-Set
+Dukung Ganjar, Pemulung di Blitar Ikut Nobar Debat Capres
+GMNI Raden Wijaya Surabaya Nobar Debat Capres, Ingin Lihat Pemimpin Masa Depan
+Prabowo Janji Pemberantasan Korupsi Jadi Prioritas
+Kantor PKB Jatim Riuh saat Prabowo Ungkit Rekomendasi Anies Jadi Gubernur DKI
+Warkop di Magetan Nobar Debat, Gen Z Pilih Main Game
+AHY Serahkan Rekom Resmi Khofifah-Emil untuk Pilgub Jatim
+Penonton Nobar Debat Capres Teriakan Huu dan Gugat saat Prabowo Sampaikan Visi Misi
+Mahasiswa Surabaya Lebih Pilih Nonton Cuplikan Video Viral Streaming Dibanding Live Debat Capres
+Teriakan ‘Satu Putaran Gak Ngentekno Anggaran’ Warnai Nobar Debat
+Ganjar-Mahfud Kompak Kenakan Baju “Sat-set, Tas-tes” Saat Debat Pertama di KPU
+Relawan Persatuan Nasional Jatim Ajak Bersatu Demi Indonesia Emas 2045
+Pemkot Kediri dan BPS Sepakat Penambahan 2.623 Data Sektoral
+Dinas Kominfo Kota Kediri Ciptakan Lingkungan Digital Aman
+Demokrat Beri Tiket Cagub Jatim ke Khofifah Malam Ini
+AHY Minta Demokrat Sidoarjo All Out Menangkan Ning Lucy
+Dukung AMIN, PKB Blitar Ajak Simpatisan Nobar Debat Capres
+PDIP Surabaya Gelar Nobar di Seluruh Posko Ganjar-Mahfud, Ajak Masyarakat Lihat Gagasan Ganjar
+Selain Uji KIR, PAD Parkir Magetan Juga Tak Capai Target
+AHY Ajak Kader Demokrat Sidoarjo Raih Kembali Kemenangan
+Timnas AMIN Jatim Gelar Nobar Debat Capres di Kantor PKB
+PKS Jember: Nobar Debat agar Tak Seperti Beli Kucing dalam Karung
+Dinsos Pamekasan Harap Partisipasi Perusahaan Sukseskan Program Peduli Lansia
+Nelayan Pasuruan Adukan Sulitnya Solar ke Capres Ganjar Pranowo
+DPRD Surabaya Minta KPPS Dibekali Suplemen dan Vitamin
+Cara Dinsos Pamekasan Lindungi Lansia
+Lantik BPD, Bupati Ponorogo: Ojo Cupar, Ojo Ela-elo
+TKD Prabowo-Gibran Surabaya Akan Gelar Debat Capres Sambil Diskusi Bareng Mahasiswa
+Wali Kota Surabaya Teken SK, Staf Ahli Tak Lagi Buangan
+Masa Kampanye, Bawaslu Kota Pasuruan Temukan Banyak Pelanggaran
+Demokrat dan PPP Jember Tak Gelar Nobar Debat Capres-Cawapres
+Baliho Wabup Trenggalek Dipasang di Ponorogo, Warga Bertanya-tanya
+Pembangunan Proyek Frontage Road Ruas Deltasari Arah Waru Sidoarjo Terus Dikebut
+Tim AMIN Jombang Gelar Nobar Debat Capres-Cawapres di Graha Gus Dur
+Nobar di Posko Pemenangan, Gerindra Jember Yakini Hasil Survei
+Nobar Debat Capres-Cawapres, PDIP Jember Ingin Lihat Adu Gagasan
+Gen Z Berpotensi Kantongi Ratusan Juta Melalui Hilirisasi
+PAD Magetan dari Uji KIR Tak Capai Target di 2023
+Nasdem Jember Gelar Nobar Debat Capres-Cawapres
+Ketua PPP Jember Cemaskan Upaya Pengkerdilan Partai Islam
+PDIP Kota Blitar: Tidak Ada Nobar Debat Capres 2024
+TPD Ganjar-Mahfud Jatim Nobar Debat di Gedung Internatio Surabaya
+Apresiasi Survei Kompas, PDIP: Hanya Ganjar-Mahfud Penerus Jokowi Secara Ideologis
+Andayani Maju Kembali Caleg DPRD Kota Kediri, Istikamah Garap ‘Urusan Perut’
+Kaum Muda Mulai Tak Percaya Penegak Hukum, Ini Solusinya Menurut Rizal Rustam
+Dishub Kota Malang Mulai Petakan Potensi Kemacetan saat Libur Nataru
+Para Nelayan Harap Khofifah-Emil Lanjut Periode Kedua
+Sumenep Butuh 27.041 KPPS Pemilu 2024, Ini Persyaratannya
+Apindo Dukung Ganjar dalam Mewujudkan Kepastian Hukum dan Penegakan Hukum
+KPU Surabaya Butuh 57.169 KPPS, Segini Honornya
+Natalius Pigai Pastikan Prabowo Bersih dari Tuduhan Pelanggaran HAM
+Bawaslu Gresik Temukan Banyak Pelanggaran APK
+Pemkot Kediri Bangun Ketangguhan dan Mitigasi Bencana di Sekolah
+Kemensos Puji Kinerja Cepat IPSM Selama 48 Tahun Mengabdi
+Dana Hibah Pilkada Lamongan 2024 Disepakati Rp71,5 M
+TPN Ganjar-Mahfud Terima Banyak Masukan dari Aktivis Jombang
+Revitalisasi Trotoar GOR Sidoarjo Juga akan Dihiasi Taman Hijau nan Estetik
+Ada 16 TPS Khusus di Ponorogo untuk Pemilu 2024
+Ganjar-Mahfud Posisi Buntut di Survei Kompas, Ini Kata Hasto
+Pemeriksaan Kesehatan Calon KPPS Blitar Gratis di Kecamatan
+Warga Desa Truneng Magetan Demo, Tuntut Seleksi Perangkat Desa Diulang
+Eri Cahyadi Siapkan Antisipasi Hadapi Lonjakan Wisatawan Saat Libur Nataru
+Pasar Wisata Cheng Hoo Direhab, PKL Bakal Direlokasi
+Blitar Siapkan Dana Rp4,9 M Bangun 10 Palang Pintu KA
+KONI Blitar Ancam Bubar, Dispora Pastikan Dana Pembinaan
+TKN Prabowo-Gibran: Hindari Hoaks Pemecah Masyarakat
+Korupsi Pengadaan APD, KPK Periksa Anggota DPR
+Caleg PDIP Ghina Dengar Keluhan Warga Ngadas Probolinggo
+Kader dan Simpatisan PKS Blitar Gelar Flashmob Dukung AMIN
+Yusril Siap Bela Prabowo-Gibran Hadapi Gugatan di PN Jakpus
+TKN: Prabowo Subianto Siap Debat Perdana Pilpres 2024
+Ngejok dan Sedekah Laut, Tradisi Peluncuran Kapal Baru Nelayan di Lamongan
+Penerimaan Pajak PBB-P2 Tuban Rp45 Miliar, 9 Kecamatan Belum Lunas
+Usung Khofifah Cagub Jatim 2024, Gerindra Lirik Emil Cawagub?
+Gelar Flashmob Ratusan Titik, PKS Jatim Kampanyekan Tiga Gagasan
+KPU Gresik Targetkan Partisipasi Pemilih Meningkat
+Gubernur Jawa Timur Dorong Pertumbuhan Ekonomi Inklusif
+Surabaya Dipilih Peringatan Natal Nasional, Lokasi: Gereja Bethany Nginden
+Setara Institute: Kekerasan terhadap Jurnalis Masih Kerap Terjadi
+Ribuan Warga Kediri Ikuti Jalan Sehat Partai Gerindra
+PKS Tuban Gelar Kampanye Perdana dengan Flashmob
+Ganjar Usul Penjara Koruptor di Nusakambangan, Tama: Bukti Komitmen
+PKS Jombang Gelar Kampanye Gagasan di 6 Titik Keramaian
+Jaga Estetika, Pemkot Surabaya Tertibkan APK Melanggar
+TKD Prabowo-Gibran Jatim Konsolidasi Akbar
+Blitar Kebut Sejumlah Proyek di Akhir Tahun
+TKN Fanta Bersihkan Rumah Ibadah dan Cek Up Gratis
+Susul PAN, Gerindra Beri Rekom ke Khofifah Cagub Jatim 2024
+Pemuda Muhammadiyah Rekom Mas Ibad Maju Calon Ketua KNPI Kota Kediri
+Bupati Gus Muhdlor Terus Percantik Wajah Kota Sidoarjo
+Sosialisasikan Ganjar-Mahfud, Ratusan Warga Waru Sidoarjo Senam Bersama
+Relawan Bolone Mase Kediri Gelar Mancing Gratis
+Gelorakan GEN 170, Anis Matta Blusukan Sambangi Bumil
+Kisah Atlet Banyuwangi di Portugal, Awalnya Tegang Tapi Menang
+Kampanye Pasangan Prabowo-Gibran untuk Lintas Generasi Terus Dilakukan
+Pasukan Emak-emak Siap Kawal Suara AMIN di TPS se-Jatim
+Malam ‘5 Tahun Ning Ita Mengabdi’ Dimeriahkan Anji
+Sosialisasi Pajak, BPPD Bersama PWI Sidoarjo Ingatkan Pentingnya Pembayaran Pajak
+Ketua DPRD Minta PWI Sidoarjo Bantu Wujudkan Sidoarjo Gemilang
+DPRD Bojonegoro Sidak Lokasi Tambang PT WBS
+Satpol PP Tertibkan Baliho Kampanye di 7 Jalur Utama Surabaya
+Terlibat Kampanye, Dua PNS Pemkab Bangkalan Terancam Turun Pangkat
+Timnas AMIN Malang Rayu Silent Voter Pilih Anies-Muhaimin
+Caleg PPP Dilarang Ganggu Alat Peraga Kampanye Caleg Lain
+Survei Jeblok, PPP Jember: Pileg Dulu, Pilpres Belakangan
+Antisipasi Bencana Hidrometeorologi, Ini Pesan Khofifah Bagi Warga Jatim
+Timnas AMIN Kota Malang-Kota Batu Diluncurkan
+Masa Jabatan Bupati Sampang Segera Berakhir, Pj Masih Buram
+Siti Atikoh Ungkap Cara Menerapkan Antikorupsi di Keluarga Bersama Ganjar Pranowo
+Masa Kampanye, Gus Fawait: Tebar Politik Riang Gembira
+Caleg Pembobol Toko Madiun Terancam Dicoret dari Surat Suara
+Musda VII DPD AMPI Kota Kediri, Ngabdul Kharim Terpilih Aklamasi
+Dapat Dukungan dari Demokrat, Khofifah: Terima Kasih Pak SBY
+Caleg Perindo Blitar Konsolidasi Pembentukan Saksi Pemilu
+Pemkab Ponorogo Terus Proaktif Daftarkan Reog ke UNESCO
+Caleg di Blitar Pasang Baliho Bergambar One Piece, Ternyata Ini Alasannya
+Masuk Musim Penghujan, Bupati Tuban Ingatkan Potensi Bencana Alam
+Fauzi: Belum Sah ke Madura Kalau Belum ke Pulau Gili Iyang
+Peringati Hakordia, Bupati Tuban Komitmen Berantas Korupsi di Lingkup Pemkab Tuban
+SBY Minta Kursi Legislatif Demokrat di Jatim Ditambah
+Deklarasi Dukung Paslon, HISNU Minta PBNU Tegur Oknum Muslimat NU
+Dituding Terima Rp 107 M dari Erick Thohir, Ini Jawaban Sekjen PBNU Gus Ipul
+Atasi Banjir Dukuh Kupang Surabaya, Ini Langkah Eri Cahyadi
+Ini Fungsi Posko Gotong Royong PDIP Pamekasan
+KPU Kota Mojokerto Terima Logistik Pemilu 2024 Tahap I
+Inilah Alasan Ganjar Jadikan Nusakambangan Penjara Khusus Koruptor
+Lusa, Capres Prabowo Akan Hadiri Konsolidasi dan Rakorda TKD Jatim
+Jajaran TNI di Gresik Bersih-Bersih Area Pasar
+Ganjar-Mahfud Target Menang 1 Putaran di Pilpres 2024
+Bendera Raib, Golkar Mojokerto Lapor Panwascam
+Ganjar Sebut Netralitas TNI dan Polri dalam Pemilu Berdampak pada Kualitas Demokrasi
+Karang Taruna Magetan Dilibatkan untuk Partisipasi Aktif dalam Pemilu
+Pj Wali Kota Kediri Ajak Masyarakat Perangi Peredaran Rokok Ilegal
+Pj Walkot Kediri : Bentuk Kepedulian pada Masyarakat dan Lingkungan
+KPU Sumenep Distribusikan Logistik Pemilu H-14, Prioritaskan Kepulauan Jauh
+Ketua DPD RI Mendorong Peningkatan Pelayanan Haji 2024
+Ini Imbauan Pemprov Jatim untuk Pengelola Wisata di Musim Hujan
+Gandeng Pengusaha, Ganjar Siap Kembangkan KUR Murah dan Kredit Lapak untuk UMKM Nasional
+Pemkot Kediri dan Pemprov Jatim Adakan Gerakan Pangan Murah
+Baliho Caleg Partai Kebangkitan Nusantara di Jember Dirusak
+FK3I Distribusikan 21.000 Bibit Mangrove ke Pulau Gili Genting Sumenep
+Pemkab Lamongan Tingkatkan Siaga Mitigasi Hadapi Bencana Hidrometeorologi
+Alasan Ganjar Kampanye di Daerah DPT Kecil: Pemimpin Itu Harus Mendengar Suara Rakyat
+TPD Ganjar-Mahfud Jatim Tempati Gedung Saksi Bisu 10 November
+Menhub Budi Karya Tinjau Kalibrasi Bandara Dhoho Kediri
+Dua Unit Kerja Pemprov Jatim Raih Predikat Bebas Korupsi
+Demokrat Siap Pasangkan Khofifah-Emil di Pilgub Jatim 2024
+Ribuan Anggota BPD di Ponorogo Bakal Diresmikan, Ini Besaran Tunjangannya
+Ziarah Makam Bung Karno di Blitar, SBY: Lahir Batin Saya Menghormati Beliau
+Bawaslu Pamekasan Libatkan 8 Lembaga Lakukan Pengawasan Pemilu 2024
+Warga Binaan Rutan Bangil Difasilitasi Nobar Debat Capres
+Wali Kota Mojokerto Kukuhkan Pengurus KKD
+NPHD Resmi Diteken, Anggaran Pilkada 2024 di Jatim Rp 845 M
+Amburadul Semasa Bupati Faida, Pemkab Jember Akhirnya Diganjar Anugerah Meritokrasi
+7 Fraksi DPRD Lamongan Dukung Raperda Perubahan Badan Hukum LIS
+Tangkal Hoaks dan Kawal Hak Pilih, Bawaslu Kota Mojokerto Gandeng Komunitas
+Pemkot Malang Kebut Perbaikan Aspal Ambles di Jalan Bandung
+Pendaftaran KPPS Kabupaten Pasuruan Akan Segera Dibuka, Butuh 31.535 Petugas
+Materi Debat Capres Cawapres Wajib Bertema Isu Aktual
+Kornas Kader PeTiGa Minta Restu Senior Dukung Prabowo-Gibran
+Gus Miftah: Emil Sangat Layak Dampingi Khofifah di Pilgub Jatim 2024
+Pemkot dan KPU Surabaya Buat TPS Liponsos dan Griya Werdha
+Gus Muhdlor: Betonisasi Jalan dan Jembatan, Ruas Tarik-Mlirip Sidoarjo Rampung 100 Persen
+Pemkot Kediri Gandeng Kejari untuk Awasi Dana BOS
+SBY Bakal Nyekar ke Makam Bung Karno Blitar Bareng Emil
+Fahri Yakin Prabowo-Gibran Menang di DKI, Jabar, dan Banten
+Ini Titah Kang Irwan di Rapimwil PKS Jawa Timur
+19.337 Warga Malang Terancam Kehilangan Hak Pilih
+Pedestrian Gajah Mada Ponorogo Sebentar Lagi Selesai, Bakal Ramai
+Ganjar Pranowo Mengunjungi IKN: Komitmen Nyata untuk Meneruskan Visi Besar Bung Karno
+Pemilu 2024, Honor KPPS di Jombang Naik 100 Persen
+BHS Peduli Sumbang Lampu, Wifi dan Alat Musik
+Di Depan Pendukung, Khofifah Umumkan Maju Pilgub Jatim 2024
+KPU Blitar Butuh 24 ribu KPPS Pemilu 2024, Ini Syaratnya
+Bambang Haryo Dengarkan Keluhan Organda Jatim
+SIBER Kediri Sosialisasi Program Ganjar – Mahfud 1 Sarjana Untuk 1 Gakin
+Gandeng PO Bus, Blitar Bahas Trayek Khusus ke Bandara Dhoho
+Atikoh Kunjungi UMKM dan Industri Kreatif di Yogyakarta, Puji Potensi Seni-Budaya
+Kadispora Jatim Ali Kuncoro Bakal Dilantik Pj Wali Kota Mojokerto?
+Sambut Kaesang di Jawa Timur, Ketua SBI: Generasi Muda Juga Melek Politik
+Tugu Pahlawan Diduga Jadi Tempat Kampanye PSI, Pemkot Surabaya Hanya Berikan Izin Konser
+Ganjar Janji Lanjutkan Proyek Ibu Kota Nusantara di Kalimantan
+Ketua DPP PPP Minta Kader Surabaya Turun Sapa Rakyat
+Pj Wakot Kediri Arahkan Pengendalian Inflasi pada HLM TPID
+Tahun 2023, SAKIP Kota Mojokerto Meraih Predikat Sangat Baik
+Massa Beratribut PSI Bikin Macet Jalan Embong Malang Surabaya
+KNPI Kota Kediri Batasi Usia Maksimal Peserta 40 Tahun
+Seminggu Masa Kampanye, Jombang Masih Adem Ayem
+Kunjungi Bangkalan, Kaesang Bungkam Ditanya Soal Ade Armando
+Kader Dukung Prabowo-Gibran, PDIP Kabupaten Kediri Buka Suara
+PDAM Surabaya Jadikan Tandon Air Wonokitri Wisata Heritage, Kini Dibuka untuk Umum
+Mahasiswa Surabaya Gelar Mimbar Bebas Tolak Politik Dinasti
+Diskusi Kedaulatan Pangan, Atikoh Ganjar Sampaikan Terima Kasih ke Petani
+Masuk Bursa Pj Walkot Madiun, Sekda Ponorogo: Nderek Bupati
+KPU Kota Blitar Temukan Sejumlah Kotak Suara Pemilu Yang Berlubang
+Tiga Proyek Flyover Sidoarjo Segera Selesai dan Difungsikan
+Wapres RI Berikan Lima Perintah kepada Pemkab Jember untuk Tangani Stunting
+DPRD Bojonegoro Janjikan Penyelesaian Tambang Sumuragung
+Caleg Perindo Blitar Usulkan Perbaikan Jalan Rusak di 3 Desa
+Kejari Sampang Didesak Tetapkan Tersangka Lain Korupsi BLT
+Mediasi Kasus Tambang Sumuragung Bojonegoro Mendadak Batal
+Gelora Prioritaskan Program Berantas Buta Huruf Al-Qur’an
+Pemkab Lamongan Atur Strategi Guna Kendalikan Inflasi
+Bupati Jember Instruksikan Camat agar Tak Hanya di Kantor
+Perusak 24 APK Caleg PAN di Kota Kediri Terekam CCTV, Begini Cirinya
+Stadion R Soedarsono Tak Layak, Pj Bupati Pasuruan: Sabar
+Pengamat Universitas Jember: Bukan Ban Serep, Publik Perlu Tahu Kualitas Cawapres
+Bupati Tuban Serahkan 200 Mesin Jahit dan Gerobak Dorong
+Pemkot Kediri Ikuti Diskusi Rancangan Pengaturan SKPN
+KPU Jombang Buka Pendaftaran KPPS Mulai 11 Desember 2023, Butuh 27.006 Orang
+75 Lembaga di Kabupaten Mojokerto Diganjar Penghargaan
+Pakar Unair Soroti Gimik Politik untuk Rebut Simpati Pemilih Pemula
+Gus Tamim Dorong Peningkatan Pemberdayaan Ormas Blitar
+Bawaslu Kota Malang Terima Belasan Aduan Dugaan Pelanggaran
+Puan Maharani: Revisi UU Desa Tidak Bisa Buru-buru
+Kiai Asep: Jika Emil Tak Jadi Menteri, Khofifah-Emil Lanjut
+Diskominfo Kediri Ajak Kelurahan Belajar Statistik ke UB
+Bupati Kediri Serap Usulan Disabilitas dalam Peringatan HDI
+Mas Dhito Gandeng Persedikab dan Suporter Persik Kediri
+TKD Prabowo-Gibran Jombang Bagikan Nasi dan Susu Gratis
+Progres Revitalisasi Alun-alun Sidoarjo Capai 58 Persen
+MPP Ngawi Sudah Selesai 100 Persen, Bakal Ada 30 Pelayanan
+Pengamat Politik: Banyak Drama Jokowi yang Akan Terungkap Setelah Pengakuan Agus Raharjo
+Bannernya Dibuang, Caleg PDIP Kabupaten Pasuruan Akan Lapor Bawaslu
+24 APK Caleg Dirusak, PAN Kota Kediri Lapor Bawaslu
+Bawaslu Surabaya Bakal Tertibkan APK yang Menancap di Pohon
+11 Desember 2023, Pelayanan Dispencapil Ngawi Pindah ke MPP
+Reaksi Bupati Ponorogo Sekdanya Masuk Bursa Pj Walkot Madiun
+Sehari, Kota Mojokerto Panen Lima Penghargaan
+KPU Kota Blitar Butuhkan 3.059 KPPS, Segera Daftar
+Air PDAM Surabaya Dilaporkan Bau Amis, Kuning, dan Debitnya Kecil
+Blusukan ke Pasar, Ini Tiga Gagasan Ganjar-Mahfud Atasi Harga Melambung
+Diskominfo Kota Kediri Beri Sosialisasi Statistik Sektoral
+Awas, Ombudsman Jatim Pelototi Netralitas ASN di Pemilu 2024
+Petugas Haji Indonesia Harus Melek Digital
+Istighosah di Bondowoso, Habib Lutfi Beri Ijazah Hibz Bahar
+Sleman Pastikan Stok Bapok Nataru Aman, Bagaimana Jatim?
+Dari Posisi Juru Kunci, Jember Tembus 5 Besar Keterbukaan Informasi Publik di Jatim
+SBY Bersholawat Bersama Ratusan Warga Kota Kediri
+Grace Natalie: Kami Kaget dengan Pernyataan Ade Armando
+Luqman, Caleg PDIP Blitar Blusukan Serap Aspirasi Warga Desa
+Luar Biasa, Kota Malang Terbaik I Nasional Anugerah Anindita Wistara Data 2023
+Ketum PAN Zulhas: di Lapangan Tinggal Dua, yang Suka dan Tidak Suka Jokowi!
+Sidoarjo Apel Siaga Antisipasi Bencana Hidrometeorologi
+Pemkab Lamongan Ajukan Raperda Badan Hukum LIS ke DPRD
+DLH Gresik Tambah Kawasan Ruang Terbuka Hijau
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hasil1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pendidikan</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Judul&#39;</span><span class="p">,</span> <span class="s1">&#39;Isi&#39;</span><span class="p">,</span> <span class="s1">&#39;Kategori&#39;</span><span class="p">])</span>
-<span class="n">hasil2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">politik</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Judul&#39;</span><span class="p">,</span> <span class="s1">&#39;Isi&#39;</span><span class="p">,</span> <span class="s1">&#39;Kategori&#39;</span><span class="p">])</span>
-<span class="n">hasil3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">sport</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Judul&#39;</span><span class="p">,</span> <span class="s1">&#39;Isi&#39;</span><span class="p">,</span> <span class="s1">&#39;Kategori&#39;</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">hasil1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">pendidikan</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Judul&#39;</span><span class="p">,</span> <span class="s1">&#39;Isi&#39;</span><span class="p">,</span><span class="s1">&#39;Tanggal&#39;</span><span class="p">,</span> <span class="s1">&#39;Kategori&#39;</span><span class="p">])</span>
+<span class="n">hasil2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">politik</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Judul&#39;</span><span class="p">,</span> <span class="s1">&#39;Isi&#39;</span><span class="p">,</span> <span class="s1">&#39;Tanggal&#39;</span><span class="p">,</span><span class="s1">&#39;Kategori&#39;</span><span class="p">])</span>
+<span class="n">hasil3</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">sport</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Judul&#39;</span><span class="p">,</span> <span class="s1">&#39;Isi&#39;</span><span class="p">,</span> <span class="s1">&#39;Tanggal&#39;</span><span class="p">,</span><span class="s1">&#39;Kategori&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -520,7 +1371,7 @@ Kemudian data disimpan.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-3de1af79-aa71-40c8-8f96-a2dee8ee97a7" class="colab-df-container">
+  <div id="df-0e348fdd-0eaa-4995-897e-9adb6e681245" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -541,429 +1392,96 @@ Kemudian data disimpan.</p>
       <th></th>
       <th>Judul</th>
       <th>Isi</th>
+      <th>Tanggal</th>
       <th>Kategori</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>Raih Pendanaan Matching Fund, Unisma Produksi ...</td>
-      <td>Malang (beritajatim.com)– Tim dari Universitas...</td>
+      <td>5 PTN di Indonesia dengan Kelas Internasional</td>
+      <td>Surabaya (beritajatim.com)– Program kelas inte...</td>
+      <td>Kamis, 14 Desember 2023, 02:00 WIB</td>
       <td>Pendidikan</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>Ratusan Guru Ngaji di Ring Satu Petrokimia Gre...</td>
-      <td>Gresik (beritajatim.com) –Ratusan guru mengaji...</td>
+      <td>PPK Ormawa HMPBK Unesa Boyong Tiga Penghargaan...</td>
+      <td>Surabaya (beritajatim.com) –Program Penguatan ...</td>
+      <td>Kamis, 14 Desember 2023, 00:52 WIB</td>
       <td>Pendidikan</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>Tim PKM UB Malang Kenalkan Metode Penanaman Ve...</td>
-      <td>Malang (beritajatim.com)– Tim Program Kreativi...</td>
+      <td>Rektor Unitomo Ajak Mahasiswanya Tak Apatis pa...</td>
+      <td>Surabaya (beritajatim.com) –Rektor Universitas...</td>
+      <td>Rabu, 13 Desember 2023, 23:08 WIB</td>
       <td>Pendidikan</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>96 Persen Warga Nganjuk Terlindungi Jaminan Ke...</td>
-      <td>Nganjuk (beritajatim.com) –Pemerintah Kabupate...</td>
+      <td>PWI Gresik dan SMA Sunan Giri Gelar Pelatihan ...</td>
+      <td>Gresik (beritajatim.com)– PWI (Persatuan Warta...</td>
+      <td>Rabu, 13 Desember 2023, 19:48 WIB</td>
       <td>Pendidikan</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>PT SBI Tuban Beri Sosialisasi Bahaya Area Tamb...</td>
-      <td>Bagikan ini</td>
+      <td>Dialog Gusdurian di Untag Surabaya Ajak Perlua...</td>
+      <td>Surabaya (beritajatim.com)– Universitas 17 Agu...</td>
+      <td>Rabu, 13 Desember 2023, 16:55 WIB</td>
       <td>Pendidikan</td>
     </tr>
     <tr>
-      <th>5</th>
-      <td>Guru Besar ITS Gagas Olah Bijih Nikel Ramah Li...</td>
-      <td>Surabaya (beritajatim.com)– Guru Besar ITS Sur...</td>
-      <td>Pendidikan</td>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
     </tr>
     <tr>
-      <th>6</th>
-      <td>Yusron: Paham Literasi Politik, Tapi Tuna Politik</td>
-      <td>Surabaya (beritajatim.com) –Yusron Aminulloh, ...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>PENS Temukan Startup Binaan dengan Investor di...</td>
-      <td>Surabaya (beritajatim.com)– Politeknik Elektro...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>ICCWA Gelar Golden Group Indonesian Entreprene...</td>
-      <td>Surabaya (beritajatim.com)– Kamar Dagang Indon...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>Tim Spektronics ITS Surabaya Juara Dua Chem E-...</td>
-      <td>Surabaya (beritajatim.com) –Tim Spektronics IT...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>Eks Karyawan PT PAL Wadul DPRD Surabaya, Dipak...</td>
-      <td>Surabaya (beritajatim.com)– Eks karyawan PT PA...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>Tax Gathering KPP Pratama, Pemkot Kediri Terim...</td>
-      <td>Kediri (Beritajatim.com) –Beberapa perangkat d...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>Disorot Aiman Soal Pengintegrasian CCTV, Ini J...</td>
-      <td>Blitar (beritajatim.com)– Kapolres Blitar Kota...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>Pendukung Prabowo dan Anies Bubar Karena Hujan...</td>
-      <td>Jakarta (beritajatim.com)– Para simpatisan pas...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>Huntara Warga Terdampak Tanah Gerak Ponorogo M...</td>
-      <td>Ponorogo (beritajatim.com)– Pembangunan hunian...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>Malam Ini KPU RI  Bakal Undi Nomor Urut Capres...</td>
-      <td>Jakarta (beritajatim.com)– KPU RI (Komisi Pemi...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>Fakhri Husaini Imbau Tak Kritik Berlebihan Tim...</td>
-      <td>Surabaya (beritajatim.com)– Performa Timnas In...</td>
+      <th>1095</th>
+      <td>Sukses Pertandingan Piala Dunia U-17 di Suraba...</td>
+      <td>Surabaya (beritajatim.com)- Apel gelar pasukan...</td>
+      <td>Jumat, 10 November 2023, 14:48 WIB</td>
       <td>Sport</td>
     </tr>
     <tr>
-      <th>17</th>
-      <td>PSMP Mojokerto Jadi Tuan Rumah Grup E Liga 3 R...</td>
-      <td>Mojokerto (beritajatim.com)– PS Mojokerto Putr...</td>
+      <th>1096</th>
+      <td>Jakarta Sudah Siap Menggelar Piala Dunia U-17 ...</td>
+      <td>Jakarta (beritajatim.com)– Jakarta sebagai sal...</td>
+      <td>Jumat, 10 November 2023, 11:26 WIB</td>
       <td>Sport</td>
     </tr>
     <tr>
-      <th>18</th>
-      <td>Timnas Indonesia Bakal Turunkan Amar Rayhan La...</td>
-      <td>Surabaya (beritajatim.com) –Timnas Indonesia U...</td>
+      <th>1097</th>
+      <td>Kaledonia Baru Siap Kejutkan Para Raksasa Grup C</td>
+      <td>Jakarta (beritajatim.com)– Piala Dunia U-17 20...</td>
+      <td>Jumat, 10 November 2023, 09:44 WIB</td>
       <td>Sport</td>
     </tr>
     <tr>
-      <th>19</th>
-      <td>Indonesia Ingin Cetak Sejarah Lewat Piala Duni...</td>
-      <td>Surabaya (beritajatim.com)– Indonesia ingin ca...</td>
+      <th>1098</th>
+      <td>Kanada Siap Beri Kejutan untuk Spanyol di Laga...</td>
+      <td>Surakarta (beritajatim.com)– Kanada tahu bahwa...</td>
+      <td>Jumat, 10 November 2023, 09:34 WIB</td>
+      <td>Sport</td>
+    </tr>
+    <tr>
+      <th>1099</th>
+      <td>Spanyol Incar Start Mulus di Piala Dunia U-17 ...</td>
+      <td>Surakarta (beritajatim.com)– Selain Grup A, ra...</td>
+      <td>Jumat, 10 November 2023, 09:22 WIB</td>
       <td>Sport</td>
     </tr>
   </tbody>
 </table>
-</div>
-    <div class="colab-df-buttons">
-      
-  <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-3de1af79-aa71-40c8-8f96-a2dee8ee97a7')"
-            title="Convert this dataframe to an interactive table."
-            style="display:none;">
-      
-  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
-    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
-  </svg>
-    </button>
-    
-  <style>
-    .colab-df-container {
-      display:flex;
-      gap: 12px;
-    }
-
-    .colab-df-convert {
-      background-color: #E8F0FE;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      display: none;
-      fill: #1967D2;
-      height: 32px;
-      padding: 0 0 0 0;
-      width: 32px;
-    }
-
-    .colab-df-convert:hover {
-      background-color: #E2EBFA;
-      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
-      fill: #174EA6;
-    }
-
-    .colab-df-buttons div {
-      margin-bottom: 4px;
-    }
-
-    [theme=dark] .colab-df-convert {
-      background-color: #3B4455;
-      fill: #D2E3FC;
-    }
-
-    [theme=dark] .colab-df-convert:hover {
-      background-color: #434B5C;
-      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
-      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
-      fill: #FFFFFF;
-    }
-  </style>
-
-    <script>
-      const buttonEl =
-        document.querySelector('#df-3de1af79-aa71-40c8-8f96-a2dee8ee97a7 button.colab-df-convert');
-      buttonEl.style.display =
-        google.colab.kernel.accessAllowed ? 'block' : 'none';
-
-      async function convertToInteractive(key) {
-        const element = document.querySelector('#df-3de1af79-aa71-40c8-8f96-a2dee8ee97a7');
-        const dataTable =
-          await google.colab.kernel.invokeFunction('convertToInteractive',
-                                                    [key], {});
-        if (!dataTable) return;
-
-        const docLinkHtml = 'Like what you see? Visit the ' +
-          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
-          + ' to learn more about interactive tables.';
-        element.innerHTML = '';
-        dataTable['output_type'] = 'display_data';
-        await google.colab.output.renderOutput(dataTable, element);
-        const docLink = document.createElement('div');
-        docLink.innerHTML = docLinkHtml;
-        element.appendChild(docLink);
-      }
-    </script>
-  </div>
-  
-    </div>
-  </div>
-  </div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
-<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="nn">&lt;ipython-input-8-d5df0069828e&gt;</span> in <span class="ni">&lt;cell line: 2&gt;</span><span class="nt">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
-
-<span class="nn">/usr/local/lib/python3.10/dist-packages/google/colab/drive.py</span> in <span class="ni">mount</span><span class="nt">(mountpoint, force_remount, timeout_ms, readonly)</span>
-<span class="g g-Whitespace">    </span><span class="mi">101</span> <span class="k">def</span> <span class="nf">mount</span><span class="p">(</span><span class="n">mountpoint</span><span class="p">,</span> <span class="n">force_remount</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout_ms</span><span class="o">=</span><span class="mi">120000</span><span class="p">,</span> <span class="n">readonly</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">102</span><span class="w">   </span><span class="sd">&quot;&quot;&quot;Mount your Google Drive at the specified mountpoint path.&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">103</span>   <span class="k">return</span> <span class="n">_mount</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span>       <span class="n">mountpoint</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">105</span>       <span class="n">force_remount</span><span class="o">=</span><span class="n">force_remount</span><span class="p">,</span>
-
-<span class="nn">/usr/local/lib/python3.10/dist-packages/google/colab/drive.py</span> in <span class="ni">_mount</span><span class="nt">(mountpoint, force_remount, timeout_ms, ephemeral, readonly)</span>
-<span class="g g-Whitespace">    </span><span class="mi">130</span>   <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">131</span>   <span class="k">if</span> <span class="n">ephemeral</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">132</span>     <span class="n">_message</span><span class="o">.</span><span class="n">blocking_request</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">133</span>         <span class="s1">&#39;request_auth&#39;</span><span class="p">,</span> <span class="n">request</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;authType&#39;</span><span class="p">:</span> <span class="s1">&#39;dfs_ephemeral&#39;</span><span class="p">},</span> <span class="n">timeout_sec</span><span class="o">=</span><span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="p">)</span>
-
-<span class="nn">/usr/local/lib/python3.10/dist-packages/google/colab/_message.py</span> in <span class="ni">blocking_request</span><span class="nt">(request_type, request, timeout_sec, parent)</span>
-<span class="g g-Whitespace">    </span><span class="mi">174</span>       <span class="n">request_type</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="n">expect_reply</span><span class="o">=</span><span class="kc">True</span>
-<span class="g g-Whitespace">    </span><span class="mi">175</span>   <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">176</span>   <span class="k">return</span> <span class="n">read_reply_from_input</span><span class="p">(</span><span class="n">request_id</span><span class="p">,</span> <span class="n">timeout_sec</span><span class="p">)</span>
-
-<span class="nn">/usr/local/lib/python3.10/dist-packages/google/colab/_message.py</span> in <span class="ni">read_reply_from_input</span><span class="nt">(message_id, timeout_sec)</span>
-<span class="g g-Whitespace">     </span><span class="mi">94</span>     <span class="n">reply</span> <span class="o">=</span> <span class="n">_read_next_input_message</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">95</span>     <span class="k">if</span> <span class="n">reply</span> <span class="o">==</span> <span class="n">_NOT_READY</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reply</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-<span class="ne">---&gt; </span><span class="mi">96</span>       <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.025</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">97</span>       <span class="k">continue</span>
-<span class="g g-Whitespace">     </span><span class="mi">98</span>     <span class="k">if</span> <span class="p">(</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;/content/drive/MyDrive/ppw/beritajatim.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output text_html">
-  <div id="df-38f2c2e1-4d13-46e7-9e0f-701664dcec75" class="colab-df-container">
-    <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Judul</th>
-      <th>Isi</th>
-      <th>Kategori</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>Timnas Indonesia Bakal Turunkan Amar Rayhan La...</td>
-      <td>Surabaya (beritajatim.com) –Timnas Indonesia U...</td>
-      <td>Sport</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>Tim PKM UB Malang Kenalkan Metode Penanaman Ve...</td>
-      <td>Malang (beritajatim.com)– Tim Program Kreativi...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Prabowo: Seribu Teman Terlalu Sedikit, Satu Mu...</td>
-      <td>Surabaya (beritajatim.com) –Calon Presiden Koa...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>96 Persen Warga Nganjuk Terlindungi Jaminan Ke...</td>
-      <td>Nganjuk (beritajatim.com) –Pemerintah Kabupate...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>Ratusan Guru Ngaji di Ring Satu Petrokimia Gre...</td>
-      <td>Gresik (beritajatim.com) –Ratusan guru mengaji...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>PT SBI Tuban Beri Sosialisasi Bahaya Area Tamb...</td>
-      <td>Bagikan ini</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>Fakhri Husaini Imbau Tak Kritik Berlebihan Tim...</td>
-      <td>Surabaya (beritajatim.com)– Performa Timnas In...</td>
-      <td>Sport</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>Tim Spektronics ITS Surabaya Juara Dua Chem E-...</td>
-      <td>Surabaya (beritajatim.com) –Tim Spektronics IT...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>Peserta SKD CASN Kota Malang Gagal Login, Ini ...</td>
-      <td>Malang (beritajatim.com)– Ujian Seleksi Kompet...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>Indonesia Ingin Cetak Sejarah Lewat Piala Duni...</td>
-      <td>Surabaya (beritajatim.com)– Indonesia ingin ca...</td>
-      <td>Sport</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>Ganjar: Demokrasi Kita Sedang Tidak Baik-Baik ...</td>
-      <td>Jakarta (beritajatim.com)– Ganjar Pranowo, sal...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>ICCWA Gelar Golden Group Indonesian Entreprene...</td>
-      <td>Surabaya (beritajatim.com)– Kamar Dagang Indon...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>Guru Besar ITS Gagas Olah Bijih Nikel Ramah Li...</td>
-      <td>Surabaya (beritajatim.com)– Guru Besar ITS Sur...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>Raih Pendanaan Matching Fund, Unisma Produksi ...</td>
-      <td>Malang (beritajatim.com)– Tim dari Universitas...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>PSMP Mojokerto Jadi Tuan Rumah Grup E Liga 3 R...</td>
-      <td>Mojokerto (beritajatim.com)– PS Mojokerto Putr...</td>
-      <td>Sport</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>PENS Temukan Startup Binaan dengan Investor di...</td>
-      <td>Surabaya (beritajatim.com)– Politeknik Elektro...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>Yusron: Paham Literasi Politik, Tapi Tuna Politik</td>
-      <td>Surabaya (beritajatim.com) –Yusron Aminulloh, ...</td>
-      <td>Pendidikan</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>Komisi A Pertanyakan Netralitas Pemkot Surabay...</td>
-      <td>Surabaya (beritajatim.com) –Komisi A DPRD Sura...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>Dinasti Nusantara: Ganjar Perhatian pada Budaya</td>
-      <td>Kediri (beritajatim.com)– Koordinator Wilayah ...</td>
-      <td>Politik</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>Ketua DPD RI Ingatkan Risiko Paylater ke Keseh...</td>
-      <td>Jakarta (beritajatim.com)– Dalam era digital i...</td>
-      <td>Politik</td>
-    </tr>
-  </tbody>
-</table>
+<p>1100 rows × 4 columns</p>
 </div>
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-38f2c2e1-4d13-46e7-9e0f-701664dcec75')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-0e348fdd-0eaa-4995-897e-9adb6e681245')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -1015,12 +1533,12 @@ Kemudian data disimpan.</p>
 
     <script>
       const buttonEl =
-        document.querySelector('#df-38f2c2e1-4d13-46e7-9e0f-701664dcec75 button.colab-df-convert');
+        document.querySelector('#df-0e348fdd-0eaa-4995-897e-9adb6e681245 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-38f2c2e1-4d13-46e7-9e0f-701664dcec75');
+        const element = document.querySelector('#df-0e348fdd-0eaa-4995-897e-9adb6e681245');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1040,8 +1558,8 @@ Kemudian data disimpan.</p>
   </div>
 
 
-<div id="df-45bcda74-1244-450a-b856-6e43e15ae285">
-  <button class="colab-df-quickchart" onclick="quickchart('df-45bcda74-1244-450a-b856-6e43e15ae285')"
+<div id="df-86dfa9e1-f328-4c98-ad1e-411827e461a8">
+  <button class="colab-df-quickchart" onclick="quickchart('df-86dfa9e1-f328-4c98-ad1e-411827e461a8')"
             title="Suggest charts"
             style="display:none;">
 
@@ -1160,7 +1678,353 @@ Kemudian data disimpan.</p>
     }
     (() => {
       let quickchartButtonEl =
-        document.querySelector('#df-45bcda74-1244-450a-b856-6e43e15ae285 button');
+        document.querySelector('#df-86dfa9e1-f328-4c98-ad1e-411827e461a8 button');
+      quickchartButtonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+    })();
+  </script>
+</div>
+    </div>
+  </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Mounted at /content/drive
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">combined_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">frac</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;/content/drive/MyDrive/ppw/beritajatim.csv&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+  <div id="df-a305f0a6-7f02-4e7a-abad-18cb19c4e725" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Judul</th>
+      <th>Isi</th>
+      <th>Tanggal</th>
+      <th>Kategori</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Pelatih Ungkap Dua Faktor Kekalahan Persema da...</td>
+      <td>Jember (beritajatim.com)– Persema Malang dihaj...</td>
+      <td>Selasa, 5 Desember 2023, 21:52 WIB</td>
+      <td>Sport</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Jumpa Persebaya, Persis Belum Tentu Dipimpin L...</td>
+      <td>Jakarta (beritajatim.com)– Persis Solo belum t...</td>
+      <td>Senin, 11 Desember 2023, 09:56 WIB</td>
+      <td>Sport</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Eits! 229 Orang di Jombang Positif HIV/AIDS</td>
+      <td>Jombang (beritajatim.com) –Sebanyak 229 orang ...</td>
+      <td>Minggu, 3 Desember 2023, 07:32 WIB</td>
+      <td>Pendidikan</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Bupati Sidoarjo Siagakan BPBD Antisipasi Benca...</td>
+      <td>Sidoarjo (beritajatim.com)– Bupati Sidoarjo H....</td>
+      <td>Rabu, 13 Desember 2023, 14:38 WIB</td>
+      <td>Politik</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Pesta Siaga ASIK 2023, Bentuk Generasi Berkara...</td>
+      <td>Lamongan (beritajatim.com) –Pramuka Lamongan m...</td>
+      <td>Selasa, 21 November 2023, 21:54 WIB</td>
+      <td>Pendidikan</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>1095</th>
+      <td>PKS Tuban Gelar Kampanye Perdana dengan Flashmob</td>
+      <td>Tuban (beritajatim.com) –DPD Partai Keadilan S...</td>
+      <td>Minggu, 10 Desember 2023, 18:46 WIB</td>
+      <td>Politik</td>
+    </tr>
+    <tr>
+      <th>1096</th>
+      <td>Musim Pancaroba, Peternak Kediri Waspada Penya...</td>
+      <td>Kediri (beritajatim.com) –Memasuki musim panca...</td>
+      <td>Selasa, 14 November 2023, 09:10 WIB</td>
+      <td>Pendidikan</td>
+    </tr>
+    <tr>
+      <th>1097</th>
+      <td>Dukung Ganjar, Pemulung di Blitar Ikut Nobar D...</td>
+      <td>Blitar (beritajatim.com) –Seorang pemulung di ...</td>
+      <td>Selasa, 12 Desember 2023, 21:48 WIB</td>
+      <td>Politik</td>
+    </tr>
+    <tr>
+      <th>1098</th>
+      <td>Lawan Simo Putra, PSMP Target Kembali Raih Poin</td>
+      <td>Mojokerto (beritajatim.com)– Tim PS Mojokerto ...</td>
+      <td>Kamis, 7 Desember 2023, 11:15 WIB</td>
+      <td>Sport</td>
+    </tr>
+    <tr>
+      <th>1099</th>
+      <td>Kisah Atlet Banyuwangi di Portugal, Awalnya Te...</td>
+      <td>Banyuwangi (beritajatim.com) –Atlet Banyuwangi...</td>
+      <td>Minggu, 10 Desember 2023, 11:29 WIB</td>
+      <td>Politik</td>
+    </tr>
+  </tbody>
+</table>
+<p>1100 rows × 4 columns</p>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-a305f0a6-7f02-4e7a-abad-18cb19c4e725')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-a305f0a6-7f02-4e7a-abad-18cb19c4e725 button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-a305f0a6-7f02-4e7a-abad-18cb19c4e725');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+<div id="df-d2943bb5-a344-443c-aa69-68890236f99e">
+  <button class="colab-df-quickchart" onclick="quickchart('df-d2943bb5-a344-443c-aa69-68890236f99e')"
+            title="Suggest charts"
+            style="display:none;">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+     width="24px">
+    <g>
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+    </g>
+</svg>
+  </button>
+
+<style>
+  .colab-df-quickchart {
+      --bg-color: #E8F0FE;
+      --fill-color: #1967D2;
+      --hover-bg-color: #E2EBFA;
+      --hover-fill-color: #174EA6;
+      --disabled-fill-color: #AAA;
+      --disabled-bg-color: #DDD;
+  }
+
+  [theme=dark] .colab-df-quickchart {
+      --bg-color: #3B4455;
+      --fill-color: #D2E3FC;
+      --hover-bg-color: #434B5C;
+      --hover-fill-color: #FFFFFF;
+      --disabled-bg-color: #3B4455;
+      --disabled-fill-color: #666;
+  }
+
+  .colab-df-quickchart {
+    background-color: var(--bg-color);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    fill: var(--fill-color);
+    height: 32px;
+    padding: 0;
+    width: 32px;
+  }
+
+  .colab-df-quickchart:hover {
+    background-color: var(--hover-bg-color);
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    fill: var(--button-hover-fill-color);
+  }
+
+  .colab-df-quickchart-complete:disabled,
+  .colab-df-quickchart-complete:disabled:hover {
+    background-color: var(--disabled-bg-color);
+    fill: var(--disabled-fill-color);
+    box-shadow: none;
+  }
+
+  .colab-df-spinner {
+    border: 2px solid var(--fill-color);
+    border-color: transparent;
+    border-bottom-color: var(--fill-color);
+    animation:
+      spin 1s steps(1) infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      border-color: transparent;
+      border-bottom-color: var(--fill-color);
+      border-left-color: var(--fill-color);
+    }
+    20% {
+      border-color: transparent;
+      border-left-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+    }
+    30% {
+      border-color: transparent;
+      border-left-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+      border-right-color: var(--fill-color);
+    }
+    40% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+    }
+    60% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+    }
+    80% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+      border-bottom-color: var(--fill-color);
+    }
+    90% {
+      border-color: transparent;
+      border-bottom-color: var(--fill-color);
+    }
+  }
+</style>
+
+  <script>
+    async function quickchart(key) {
+      const quickchartButtonEl =
+        document.querySelector('#' + key + ' button');
+      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.
+      quickchartButtonEl.classList.add('colab-df-spinner');
+      try {
+        const charts = await google.colab.kernel.invokeFunction(
+            'suggestCharts', [key], {});
+      } catch (error) {
+        console.error('Error during call to suggestCharts:', error);
+      }
+      quickchartButtonEl.classList.remove('colab-df-spinner');
+      quickchartButtonEl.classList.add('colab-df-quickchart-complete');
+    }
+    (() => {
+      let quickchartButtonEl =
+        document.querySelector('#df-d2943bb5-a344-443c-aa69-68890236f99e button');
       quickchartButtonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
     })();
@@ -1178,7 +2042,7 @@ Kemudian data disimpan.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-a8f55eda-228f-491c-b287-42234a20d4d2" class="colab-df-container">
+  <div id="df-1d148f61-dc70-4b59-a68e-02c4e862e46a" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1207,15 +2071,15 @@ Kemudian data disimpan.</p>
   <tbody>
     <tr>
       <th>Pendidikan</th>
-      <td>10</td>
+      <td>400</td>
     </tr>
     <tr>
       <th>Politik</th>
-      <td>6</td>
+      <td>300</td>
     </tr>
     <tr>
       <th>Sport</th>
-      <td>4</td>
+      <td>400</td>
     </tr>
   </tbody>
 </table>
@@ -1223,7 +2087,7 @@ Kemudian data disimpan.</p>
     <div class="colab-df-buttons">
 
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-a8f55eda-228f-491c-b287-42234a20d4d2')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-1d148f61-dc70-4b59-a68e-02c4e862e46a')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
 
@@ -1275,12 +2139,12 @@ Kemudian data disimpan.</p>
 
     <script>
       const buttonEl =
-        document.querySelector('#df-a8f55eda-228f-491c-b287-42234a20d4d2 button.colab-df-convert');
+        document.querySelector('#df-1d148f61-dc70-4b59-a68e-02c4e862e46a button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-a8f55eda-228f-491c-b287-42234a20d4d2');
+        const element = document.querySelector('#df-1d148f61-dc70-4b59-a68e-02c4e862e46a');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1300,8 +2164,8 @@ Kemudian data disimpan.</p>
   </div>
 
 
-<div id="df-a709bade-e36e-4838-8b47-4dc09a460abe">
-  <button class="colab-df-quickchart" onclick="quickchart('df-a709bade-e36e-4838-8b47-4dc09a460abe')"
+<div id="df-044b486c-eefc-45a8-a559-96998cb07a89">
+  <button class="colab-df-quickchart" onclick="quickchart('df-044b486c-eefc-45a8-a559-96998cb07a89')"
             title="Suggest charts"
             style="display:none;">
 
@@ -1420,7 +2284,7 @@ Kemudian data disimpan.</p>
     }
     (() => {
       let quickchartButtonEl =
-        document.querySelector('#df-a709bade-e36e-4838-8b47-4dc09a460abe button');
+        document.querySelector('#df-044b486c-eefc-45a8-a559-96998cb07a89 button');
       quickchartButtonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
     })();

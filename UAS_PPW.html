@@ -413,10 +413,6 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-naive-bayes-with-lda">Model Naive Bayes With LDA</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#predict">Predict</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-model">Save Model</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-without-lda">Modeling Without LDA</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-model-dengan-dataset-asli">Training Model dengan Dataset Asli</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Predict</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Save Model</a></li>
 </ul>
@@ -472,9 +468,9 @@ document.write(`
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data] Downloading package stopwords to /root/nltk_data...
-[nltk_data]   Package stopwords is already up-to-date!
+[nltk_data]   Unzipping corpora/stopwords.zip.
 [nltk_data] Downloading package punkt to /root/nltk_data...
-[nltk_data]   Package punkt is already up-to-date!
+[nltk_data]   Unzipping tokenizers/punkt.zip.
 </pre></div>
 </div>
 </div>
@@ -3872,59 +3868,6 @@ Confusion Matriks:
 </div>
 </div>
 </section>
-</section>
-<section id="modeling-without-lda">
-<h2>Modeling Without LDA<a class="headerlink" href="#modeling-without-lda" title="Permalink to this heading">#</a></h2>
-<section id="training-model-dengan-dataset-asli">
-<h3>Training Model dengan Dataset Asli<a class="headerlink" href="#training-model-dengan-dataset-asli" title="Permalink to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Membuat model Naive Bayes</span>
-<span class="n">nb</span> <span class="o">=</span> <span class="n">GaussianNB</span><span class="p">()</span>
-
-<span class="c1"># Melatih model nbada data pelatihan</span>
-<span class="n">nb</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-
-<span class="c1"># Melakukan prediksi pada data pengujian</span>
-<span class="n">y_pred_nb</span> <span class="o">=</span> <span class="n">nb</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
-
-<span class="c1"># Menghitung akurasi</span>
-<span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_nb</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Akurasi:&quot;</span><span class="p">,</span> <span class="n">accuracy</span><span class="p">)</span>
-
-<span class="c1"># Menampilkan laporan klasifikasi</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Laporan Klasifikasi:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">classification_report</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_nb</span><span class="p">))</span>
-
-<span class="c1"># Menampilkan matriks kebingungan</span>
-<span class="n">confusion</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">y_pred_nb</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Confusion Matriks:&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">confusion</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Akurasi: 0.8848484848484849
-Laporan Klasifikasi:
-              precision    recall  f1-score   support
-
-  Pendidikan       0.82      0.91      0.87       117
-     Politik       0.84      0.79      0.81        84
-       Sport       0.98      0.92      0.95       129
-
-    accuracy                           0.88       330
-   macro avg       0.88      0.87      0.88       330
-weighted avg       0.89      0.88      0.89       330
-
-Confusion Matriks:
-[[107   9   1]
- [ 17  66   1]
- [  6   4 119]]
-</pre></div>
-</div>
-</div>
-</div>
-</section>
 <section id="id1">
 <h3>Predict<a class="headerlink" href="#id1" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
@@ -4040,10 +3983,6 @@ Confusion Matriks:
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-naive-bayes-with-lda">Model Naive Bayes With LDA</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#predict">Predict</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#save-model">Save Model</a></li>
-</ul>
-</li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#modeling-without-lda">Modeling Without LDA</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-model-dengan-dataset-asli">Training Model dengan Dataset Asli</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Predict</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Save Model</a></li>
 </ul>

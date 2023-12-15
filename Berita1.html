@@ -142,7 +142,7 @@ const thebe_selector_output = ".output, .cell_output"
 
   
 
-<a class="navbar-brand logo" href="intro.html">
+<a class="navbar-brand logo" href="intro2.html">
   
   
   
@@ -163,7 +163,7 @@ const thebe_selector_output = ".output, .cell_output"
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
-                <a class="reference internal" href="intro.html">
+                <a class="reference internal" href="intro2.html">
                     Welcome to your Jupyter Book
                 </a>
             </li>
@@ -437,30 +437,16 @@ document.write(`
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>				Jakarta (ANTARA) - Ketua Partai Solidaritas Indonesia (PSI) Kaesang Pangarep mengatakan bahwa partainya tidak ingin ikut campur terkait urusan kakaknya yang sekaligus bakal calon wakil presiden dari Koalisi Indonesia Maju Gibran Rakabuming Raka di partainya.
-Kaesang menanggapi pernyataan dari Ketua Bidang Kehormatan DPP PDIP Komarudin Watubun yang mengatakan bila partainya memecat Gibran Rakabuming Raka usai menjadi bacawapres dari Prabowo Subianto akan muncul narasi dizalimi.
-&quot;Ya balik lagi itu saya kembalikan lagi, itu urusan dapur partai lain, PSI tidak ikut campur tentang itu,&quot; kata Kaesang di Kantor DPP PSI, Jakarta Pusat, Rabu.
-Namun, Kaesang siap menerima Gibran ke partainya bila Wali Kota Solo, Jawa Tengah, tersebut sudah tidak lagi menjadi kader PDIP.
-&quot;Oh iya terbuka sekali kan berkali-kali bilang kalau masuk ke sini sangat terbuka,&quot; ujar Kaesang.
-Baca juga: Forum Komunikasi Santri Indonesia resmi gabung PSI
-Baca juga: Ketum PSI kunjungi UMKM dan pengrajin sasando di Kupang
- 
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
+<span class="nn">&lt;ipython-input-1-e5ea5becb547&gt;</span> in <span class="ni">&lt;cell line: 15&gt;</span><span class="nt">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="c1"># Ekstraksi teks dari elemen-elemen yang berisi berita</span>
+<span class="g g-Whitespace">     </span><span class="mi">14</span> <span class="n">article</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;div&#39;</span> <span class="p">,</span><span class="n">class_</span><span class="o">=</span><span class="s2">&quot;post-content clearfix&quot;</span><span class="p">)</span>  <span class="c1"># Sesuaikan dengan struktur HTML halaman web berita</span>
+<span class="ne">---&gt; </span><span class="mi">15</span> <span class="n">article_text</span> <span class="o">=</span> <span class="n">article</span><span class="o">.</span><span class="n">get_text</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">16</span> 
+<span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="c1"># Tokenisasi teks menjadi kalimat menggunakan nltk</span>
 
-Pada Senin (30/10), Gibran sendiri mengaku sudah mendapatkan izin dari Ketua DPP PDIP Puan Maharani untuk ikut berkompetisi pada Pemilihan Presiden 2024.
-&quot;Teman-teman media kan saya sudah berkali-kali bilang.
-Kira-kira dua minggu lalu saya sudah ketemu Mbak Puan dan Pak Arsjad (Ketua Tim Pemenangan Nasional Ganjar Pranowo di Pilpres 2024 Arsjad Rasjid, Red.
-),&quot; katanya di Solo, Jawa Tengah.
-Pada pertemuan tersebut, ia mengaku sudah mendapatkan izin dari keduanya untuk mengikuti kontestasi pemilu tahun depan.
-&quot;Beliau berdua sudah memberi saya izin untuk ikut berkompetisi.
-Nggak perlu saya ulang-ulang lagi,&quot; katanya.
-Terkait keanggotaannya di PDIP yang dipermasalahkan sejumlah pihak, termasuk Ketua Dewan Pimpinan Cabang (DPC) PDIP Kota Surakarta FX Hadi Rudyatmo, dikatakannya, dalam waktu dekat ini ia akan bertemu dengan yang bersangkutan.
-&quot;Beliau sudah WA saya, nanti ya saya carikan jadwal.
-Biar tidak saling tumpang tindih jadwalnya,&quot; katanya.
-Termasuk mengenai permintaan dari sejumlah kader PDIP yang meminta Gibran mengembalikan kartu tanda anggota (KTA), ia akan membahasnya dengan FX Rudy.Pewarta: Hendri Sukma IndrawanEditor: Herry Soebanto				COPYRIGHT © ANTARA 2023
-</pre></div>
-</div>
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[nltk_data] Downloading package punkt to /root/nltk_data...
-[nltk_data]   Package punkt is already up-to-date!
+<span class="ne">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;get_text&#39;
 </pre></div>
 </div>
 </div>
@@ -822,9 +808,7 @@ permintaan: 0.1979
 pewarta: 0.1979
 rudy: 0.1979
 sejumlah: 0.1723
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>soebanto: 0.1979
+soebanto: 0.1979
 sukma: 0.1979
 tanda: 0.1979
 termasuk: 0.1723
@@ -1022,7 +1006,7 @@ Cosine Similarity antara Kalimat 15 dan Kalimat 16: 0.0000
 </div>
 <div class="cell_output docutils container">
 <div class="output text_html">
-  <div id="df-f5ccd314-4510-4021-9bb7-7842f934215a" class="colab-df-container">
+  <div id="df-0f86119a-7372-41e0-9015-1c43ea18f3f8" class="colab-df-container">
     <div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
@@ -1368,17 +1352,17 @@ Cosine Similarity antara Kalimat 15 dan Kalimat 16: 0.0000
 </table>
 </div>
     <div class="colab-df-buttons">
-      
+
   <div class="colab-df-container">
-    <button class="colab-df-convert" onclick="convertToInteractive('df-f5ccd314-4510-4021-9bb7-7842f934215a')"
+    <button class="colab-df-convert" onclick="convertToInteractive('df-0f86119a-7372-41e0-9015-1c43ea18f3f8')"
             title="Convert this dataframe to an interactive table."
             style="display:none;">
-      
+
   <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
     <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
   </svg>
     </button>
-    
+
   <style>
     .colab-df-container {
       display:flex;
@@ -1422,12 +1406,12 @@ Cosine Similarity antara Kalimat 15 dan Kalimat 16: 0.0000
 
     <script>
       const buttonEl =
-        document.querySelector('#df-f5ccd314-4510-4021-9bb7-7842f934215a button.colab-df-convert');
+        document.querySelector('#df-0f86119a-7372-41e0-9015-1c43ea18f3f8 button.colab-df-convert');
       buttonEl.style.display =
         google.colab.kernel.accessAllowed ? 'block' : 'none';
 
       async function convertToInteractive(key) {
-        const element = document.querySelector('#df-f5ccd314-4510-4021-9bb7-7842f934215a');
+        const element = document.querySelector('#df-0f86119a-7372-41e0-9015-1c43ea18f3f8');
         const dataTable =
           await google.colab.kernel.invokeFunction('convertToInteractive',
                                                     [key], {});
@@ -1445,10 +1429,137 @@ Cosine Similarity antara Kalimat 15 dan Kalimat 16: 0.0000
       }
     </script>
   </div>
-  
+
+
+<div id="df-4dbd7814-2053-4dbb-bc43-5ec2fd9d3d2d">
+  <button class="colab-df-quickchart" onclick="quickchart('df-4dbd7814-2053-4dbb-bc43-5ec2fd9d3d2d')"
+            title="Suggest charts."
+            style="display:none;">
+
+<svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+     width="24px">
+    <g>
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+    </g>
+</svg>
+  </button>
+
+<style>
+  .colab-df-quickchart {
+      --bg-color: #E8F0FE;
+      --fill-color: #1967D2;
+      --hover-bg-color: #E2EBFA;
+      --hover-fill-color: #174EA6;
+      --disabled-fill-color: #AAA;
+      --disabled-bg-color: #DDD;
+  }
+
+  [theme=dark] .colab-df-quickchart {
+      --bg-color: #3B4455;
+      --fill-color: #D2E3FC;
+      --hover-bg-color: #434B5C;
+      --hover-fill-color: #FFFFFF;
+      --disabled-bg-color: #3B4455;
+      --disabled-fill-color: #666;
+  }
+
+  .colab-df-quickchart {
+    background-color: var(--bg-color);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    fill: var(--fill-color);
+    height: 32px;
+    padding: 0;
+    width: 32px;
+  }
+
+  .colab-df-quickchart:hover {
+    background-color: var(--hover-bg-color);
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    fill: var(--button-hover-fill-color);
+  }
+
+  .colab-df-quickchart-complete:disabled,
+  .colab-df-quickchart-complete:disabled:hover {
+    background-color: var(--disabled-bg-color);
+    fill: var(--disabled-fill-color);
+    box-shadow: none;
+  }
+
+  .colab-df-spinner {
+    border: 2px solid var(--fill-color);
+    border-color: transparent;
+    border-bottom-color: var(--fill-color);
+    animation:
+      spin 1s steps(1) infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      border-color: transparent;
+      border-bottom-color: var(--fill-color);
+      border-left-color: var(--fill-color);
+    }
+    20% {
+      border-color: transparent;
+      border-left-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+    }
+    30% {
+      border-color: transparent;
+      border-left-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+      border-right-color: var(--fill-color);
+    }
+    40% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+      border-top-color: var(--fill-color);
+    }
+    60% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+    }
+    80% {
+      border-color: transparent;
+      border-right-color: var(--fill-color);
+      border-bottom-color: var(--fill-color);
+    }
+    90% {
+      border-color: transparent;
+      border-bottom-color: var(--fill-color);
+    }
+  }
+</style>
+
+  <script>
+    async function quickchart(key) {
+      const quickchartButtonEl =
+        document.querySelector('#' + key + ' button');
+      quickchartButtonEl.disabled = true;  // To prevent multiple clicks.
+      quickchartButtonEl.classList.add('colab-df-spinner');
+      try {
+        const charts = await google.colab.kernel.invokeFunction(
+            'suggestCharts', [key], {});
+      } catch (error) {
+        console.error('Error during call to suggestCharts:', error);
+      }
+      quickchartButtonEl.classList.remove('colab-df-spinner');
+      quickchartButtonEl.classList.add('colab-df-quickchart-complete');
+    }
+    (() => {
+      let quickchartButtonEl =
+        document.querySelector('#df-4dbd7814-2053-4dbb-bc43-5ec2fd9d3d2d button');
+      quickchartButtonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+    })();
+  </script>
+</div>
     </div>
   </div>
-  </div></div>
+</div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1583,7 +1694,7 @@ Closeness Centrality of Termasuk mengenai permintaan dari sejumlah kader PDIP ya
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="_images/797f1f1bedcdc0c6cba5f3e40dbb75cfc5275036fbe0dfc99d8525fd454d2821.png" src="_images/797f1f1bedcdc0c6cba5f3e40dbb75cfc5275036fbe0dfc99d8525fd454d2821.png" />
+<img alt="_images/2dd6bdea06b8a871f049fd936341381bee429488fa1632555efb83a5c4e687c2.png" src="_images/2dd6bdea06b8a871f049fd936341381bee429488fa1632555efb83a5c4e687c2.png" />
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Closeness Centrality:
 Node 0: 0.8333
 Node 1: 0.7143
